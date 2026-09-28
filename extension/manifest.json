@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Hoardly",
+  "version": "0.1.0",
+  "description": "Send downloads to Hoardly, the download manager for macOS.",
+  "background": { "service_worker": "background.js" },
+  "permissions": ["contextMenus", "storage", "nativeMessaging"],
+  "host_permissions": ["<all_urls>"],
+  "options_ui": { "page": "options.html" }
+}

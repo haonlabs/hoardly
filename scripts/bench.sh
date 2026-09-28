@@ -14,6 +14,8 @@ pkill -x Hoardly || true
 cleanup() {
   pkill -x Hoardly || true
   defaults delete id.haonlabs.hoardly downloadDirectory 2>/dev/null || true
+  defaults delete id.haonlabs.hoardly confirmBrowserDownloads 2>/dev/null || true
+  defaults delete id.haonlabs.hoardly organizeByCategory 2>/dev/null || true
   rm -f "$STORE"; [ -f "$WORK/store-backup.json" ] && mv "$WORK/store-backup.json" "$STORE"
   rm -rf "$WORK"
 }
@@ -21,6 +23,8 @@ trap cleanup EXIT
 
 T0=$(now); curl -sfL -o "$WORK/curl.bin" "$URL"; T1=$(now)
 defaults write id.haonlabs.hoardly downloadDirectory "$WORK/out"
+defaults write id.haonlabs.hoardly confirmBrowserDownloads -bool false # start without the New Download panel
+defaults write id.haonlabs.hoardly organizeByCategory -bool false
 open "$APP"; until nc -z 127.0.0.1 47801 2>/dev/null; do sleep 0.2; done
 T2=$(now)
 curl -sf -X POST http://127.0.0.1:47801/add -H "X-Hoardly-Token: $(defaults read id.haonlabs.hoardly bridgeToken)" -d "{\"url\":\"$URL\"}" >/dev/null

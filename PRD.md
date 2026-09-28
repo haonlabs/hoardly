@@ -216,7 +216,24 @@ Estimasi total: ~12–15 minggu untuk 1 developer.
 
 **Tindak lanjut (M2+):** ramp-up koneksi bertahap untuk server ber-rate-limit (OVH); pilih folder/nama sebelum mulai (U3); hapus download dari daftar.
 
-## 13. Verifikasi (saat implementasi)
+## 13. Hasil M2 — App UI (2026-09-28)
+| Req | Status |
+|---|---|
+| U1 jendela utama: sidebar filter + kategori dengan badge, tabel Name/Size/Progress/Speed/Time Left, context menu, double-click (buka file / pause-resume) | ✅ diverifikasi via screenshot |
+| U3 panel "New Download" (mengambang di atas browser): alamat, nama file, folder, Start / Download Later | ✅ screenshot; muncul dari bridge maupun ⌘N |
+| U4 menu bar (kecepatan total + daftar aktif) & Dock (badge + bar progres) | ✅ dibangun; popover menu bar belum terverifikasi otomatis |
+| U5 notifikasi selesai/gagal, klik → Finder | ✅ dibangun |
+| U6 Settings: folder, kategori, jumlah download bersamaan, koneksi, konfirmasi browser, token | ✅ screenshot |
+| U7 shortcut ⌘N, ⌫ hapus, ⌘, settings; dark mode; label aksesibilitas | ✅ |
+| Q1 antrean dari Settings; Q2 subfolder kategori | ✅ diuji dengan 5 file demo |
+| Q3 nama duplikat | ⚠️ baru rename otomatis; opsi timpa/tanya belum |
+| E1 paste dari clipboard, drag-drop link, banyak URL sekaligus | ✅ |
+| Hapus download (partial dihapus, file selesai opsional ke Trash) | ✅ |
+| Unit test host tidak lagi me-resume antrean pengguna | ✅ |
+
+**Belum:** lokalisasi Bahasa Indonesia (string sudah siap untuk String Catalog), speed limiter (E8), scheduler (Q4).
+
+## 14. Verifikasi (saat implementasi)
 - **Unit test** (`HoardlyTests`): pembagian segmen & dynamic split, parser HLS (master/media playlist, AES-128 key), resume state encode/decode.
 - **Server uji lokal** yang mendukung `Range` (mis. `caddy file-server` atau skrip kecil) + mode "tanpa Range" + mode "putus acak" → bandingkan SHA-256 hasil dengan sumber.
 - **Uji resume:** `kill -9` Hoardly di tengah download 5 GB, jalankan ulang, pastikan lanjut dan hash identik.

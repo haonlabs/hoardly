@@ -39,3 +39,17 @@ private extension ContentRange {
         self.init("bytes \(start)-\(start)/\(total.map(String.init) ?? "*")")!
     }
 }
+
+struct CategoryTests {
+    @Test func categorizesByExtension() {
+        #expect(Category(fileName: "Movie.MKV") == .video)
+        #expect(Category(fileName: "setup.dmg") == .programs)
+        #expect(Category(fileName: "archive.tar.gz") == .archives)
+        #expect(Category(fileName: "README") == .other)
+    }
+
+    @Test func parsesPastedAddresses() {
+        let urls = NewDownloadPanel.parse("https://a.com/x.zip\n  http://b.org/y.iso junk ftp://c/z file:///etc/hosts")
+        #expect(urls.map(\.absoluteString) == ["https://a.com/x.zip", "http://b.org/y.iso"])
+    }
+}

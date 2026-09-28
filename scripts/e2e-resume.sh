@@ -16,6 +16,8 @@ cleanup() {
   pkill -9 -x Hoardly || true
   kill "$SERVER" 2>/dev/null || true
   defaults delete id.haonlabs.hoardly downloadDirectory 2>/dev/null || true
+  defaults delete id.haonlabs.hoardly confirmBrowserDownloads 2>/dev/null || true
+  defaults delete id.haonlabs.hoardly organizeByCategory 2>/dev/null || true
   rm -f "$STORE"; [ -f "$WORK/store-backup.json" ] && mv "$WORK/store-backup.json" "$STORE"
   rm -rf "$WORK"
 }
@@ -24,6 +26,8 @@ trap cleanup EXIT
 dd if=/dev/urandom of="$WORK/src/blob.bin" bs=1m count="$SIZE_MB" status=none
 python3 scripts/range_server.py "$WORK/src" --rate 6000000 "$@" & SERVER=$!
 defaults write id.haonlabs.hoardly downloadDirectory "$WORK/out"
+defaults write id.haonlabs.hoardly confirmBrowserDownloads -bool false # start without the New Download panel
+defaults write id.haonlabs.hoardly organizeByCategory -bool false
 
 launch() { open "$APP"; for _ in $(seq 50); do nc -z 127.0.0.1 47801 2>/dev/null && return; sleep 0.2; done; echo "app didn't start"; exit 1; }
 field() { python3 -c "

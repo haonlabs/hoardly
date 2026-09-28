@@ -31,6 +31,40 @@ nonisolated struct Download: Codable, Identifiable, Sendable {
     var received: Int64 { segments.reduce(0) { $0 + $1.received } }
     var partURL: URL { directory.appending(path: "\(id.uuidString).hoardly-part") }
     var displayName: String { fileName ?? url.lastPathComponent }
+    var category: Category { Category(fileName: displayName) }
+    var fileURL: URL? { state == .completed ? directory.appending(path: displayName) : nil }
+}
+
+/// Q2: files sort into a subfolder of the download folder by extension.
+nonisolated enum Category: String, CaseIterable, Codable, Sendable {
+    case video = "Video", music = "Music", documents = "Documents", archives = "Archives", programs = "Programs", other = "Other"
+
+    init(fileName: String) {
+        let ext = (fileName as NSString).pathExtension.lowercased()
+        self = Self.allCases.first { $0.extensions.contains(ext) } ?? .other
+    }
+
+    var extensions: Set<String> {
+        switch self {
+        case .video: ["mp4", "mkv", "mov", "avi", "webm", "m4v", "wmv", "flv", "ts", "3gp"]
+        case .music: ["mp3", "m4a", "aac", "flac", "wav", "ogg", "opus", "aiff", "wma"]
+        case .documents: ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "pages", "numbers", "key", "txt", "rtf", "epub", "csv"]
+        case .archives: ["zip", "rar", "7z", "tar", "gz", "tgz", "bz2", "xz", "iso"]
+        case .programs: ["dmg", "pkg", "app", "exe", "msi", "apk", "deb", "rpm", "appimage"]
+        case .other: []
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .video: "film"
+        case .music: "music.note"
+        case .documents: "doc.text"
+        case .archives: "archivebox"
+        case .programs: "app.badge"
+        case .other: "doc"
+        }
+    }
 }
 
 nonisolated enum Segments {

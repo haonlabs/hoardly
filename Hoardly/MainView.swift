@@ -46,7 +46,7 @@ struct MainView: View {
         }
         .toolbar { toolbar }
         .dropDestination(for: URL.self) { urls, _ in // E1: drop links from a browser
-            NewDownloadPanel.show(urls, manager: manager)
+            NewDownloadPanel.show(urls.map { .init(url: $0, headers: [:]) }, manager: manager)
             return true
         }
         .confirmationDialog("Remove \(removing.count) download(s)?", isPresented: .constant(!removing.isEmpty)) {

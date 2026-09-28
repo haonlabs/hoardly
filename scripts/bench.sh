@@ -27,7 +27,7 @@ defaults write id.haonlabs.hoardly confirmBrowserDownloads -bool false # start w
 defaults write id.haonlabs.hoardly organizeByCategory -bool false
 open "$APP"; until nc -z 127.0.0.1 47801 2>/dev/null; do sleep 0.2; done
 T2=$(now)
-curl -sf -X POST http://127.0.0.1:47801/add -H "X-Hoardly-Token: $(defaults read id.haonlabs.hoardly bridgeToken)" -d "{\"url\":\"$URL\"}" >/dev/null
+curl -sf -X POST http://127.0.0.1:47801/add -H "X-Hoardly-Token: $(defaults read id.haonlabs.hoardly bridgeToken)" -d "{\"items\":[{\"url\":\"$URL\"}]}" >/dev/null
 state() { python3 -c "import json,sys; print(list(json.load(open(sys.argv[1]))[0]['state'])[0])" "$STORE" 2>/dev/null || echo queued; }
 until [[ "$(state)" =~ completed|failed ]]; do sleep 0.3; done
 T3=$(now)

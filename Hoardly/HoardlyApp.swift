@@ -9,11 +9,11 @@ struct HoardlyApp: App {
     init() {
         guard !DownloadManager.isTesting else { return }
         let manager = manager
-        bridge.onAdd = { url, headers in
+        bridge.onAdd = { items in
             if UserDefaults.standard.bool(forKey: "confirmBrowserDownloads") {
-                NewDownloadPanel.show([url], headers: headers, manager: manager)
+                NewDownloadPanel.show(items, manager: manager)
             } else {
-                manager.add(url, headers: headers)
+                for item in items { manager.add(item.url, headers: item.headers, fileName: item.fileName) }
             }
         }
         bridge.start()

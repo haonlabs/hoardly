@@ -6,7 +6,7 @@ usage: range_server.py DIR [--port 8765] [--no-range] [--rate BYTES_PER_SEC] [--
   --drop  cut every connection after this many bytes (exercises retry/resume)
   --max-conns  answer 429 + Retry-After beyond N concurrent transfers (like proof.ovh.net)
 """
-import argparse, os, re, threading, time
+import argparse, mimetypes, os, re, threading, time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -46,6 +46,7 @@ class Handler(BaseHTTPRequestHandler):
         else:
             self.send_response(200)
         self.send_header('Content-Length', str(end - start + 1))
+        self.send_header('Content-Type', mimetypes.guess_type(path)[0] or 'application/octet-stream')
         self.send_header('ETag', f'"{int(os.path.getmtime(path))}-{size}"')
         self.end_headers()
         sent = 0

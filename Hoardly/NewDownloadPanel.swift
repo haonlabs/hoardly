@@ -5,14 +5,17 @@ import SwiftUI
 enum NewDownloadPanel {
     private static var open: [NSWindow] = []
 
-    static func show(_ urls: [URL] = [], headers: [String: String] = [:], manager: DownloadManager) {
-        let urls = urls.isEmpty ? clipboardURLs() : urls
+    typealias Item = LocalBridge.IncomingDownload
+
+    static func show(_ items: [Item] = [], manager: DownloadManager) {
+        let items = items.isEmpty ? clipboardURLs().map { Item(url: $0, headers: [:]) } : items
         let window = NSWindow(contentRect: .zero, styleMask: [.titled, .closable], backing: .buffered, defer: false)
         window.title = String(localized: "New Download")
         window.isReleasedWhenClosed = false
         window.level = .floating
         window.contentViewController = NSHostingController(rootView: NewDownloadView(
-            manager: manager, headers: headers, text: urls.map(\.absoluteString).joined(separator: "\n")
+            manager: manager, items: items, text: items.map(\.url.absoluteString).joined(separator: "\n"),
+            name: items.count == 1 ? items[0].fileName ?? "" : ""
         ) { [weak window] in window?.close() })
         let id = ObjectIdentifier(window)
         NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { _ in
@@ -37,10 +40,10 @@ enum NewDownloadPanel {
 
 private struct NewDownloadView: View {
     let manager: DownloadManager
-    let headers: [String: String]
+    let items: [NewDownloadPanel.Item] // what the browser sent: cookies, referrer, suggested name per URL
     @State var text: String
+    @State var name: String
     let close: () -> Void
-    @State private var name = ""
     @State private var folder: URL? // nil: download folder + category subfolder
 
     private var urls: [URL] { NewDownloadPanel.parse(text) }
@@ -91,7 +94,8 @@ private struct NewDownloadView: View {
     private func add(start: Bool) {
         let custom = urls.count == 1 && !name.isEmpty ? SegmentedDownload.safeName(name) : nil
         for url in urls {
-            manager.add(url, headers: headers, fileName: custom, directory: folder, start: start)
+            let sent = items.first { $0.url == url } // URLs typed in by hand carry no browser context
+            manager.add(url, headers: sent?.headers ?? [:], fileName: custom ?? sent?.fileName, directory: folder, start: start)
         }
         close()
     }

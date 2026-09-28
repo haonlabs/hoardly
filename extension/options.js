@@ -6,7 +6,7 @@ api.storage.local.get('token').then(({ token }) => { input.value = token ?? ''; 
 
 document.getElementById('save').addEventListener('click', async () => {
   await api.storage.local.set({ token: input.value.trim() });
-  const r = await api.runtime.sendMessage('ping');
+  const r = await api.runtime.sendMessage({ type: 'ping' });
   result.textContent = r.authorized ? `✅ Paired with Hoardly (via ${r.via})`
     : r.status ? '❌ Token rejected — copy it again from the Hoardly window'
     : `❌ Hoardly not reachable — is the app running? (${r.error ?? 'no response'})`;

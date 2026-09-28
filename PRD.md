@@ -233,7 +233,24 @@ Estimasi total: ~12–15 minggu untuk 1 developer.
 
 **Belum:** lokalisasi Bahasa Indonesia (string sudah siap untuk String Catalog), speed limiter (E8), scheduler (Q4).
 
-## 14. Verifikasi (saat implementasi)
+## 14. Hasil M3 — Ekstensi browser (2026-09-28)
+| Req | Helium (otomatis, `scripts/e2e-extension.mjs`) | Safari (manual) |
+|---|---|---|
+| B4 ambil alih download sesuai aturan (ekstensi file / ukuran minimum) | ✅ via `downloads.onDeterminingFilename` | ✅ via intercept klik (content script) |
+| E6 cookies + referrer + UA ikut ke app | ✅ `session=abc123` terkirim | ✅ |
+| ⌥-klik → browser yang unduh | ✅ | ✅ |
+| B5 context menu + "Download All Links" (panel berisi daftar) | ✅ | ✅ |
+| B6 app tidak berjalan → browser tetap mengunduh | ✅ | ✅ (klik diteruskan ke Safari) |
+
+**Keputusan**
+- Aturan intercept diatur di app (Settings → Browsers) dan dikirim ke ekstensi lewat `/ping` — satu tempat untuk semua browser.
+- B6: membuka `hoardly://` dari ekstensi tidak bisa dideteksi berhasil/gagalnya, jadi fallback-nya selalu "browser yang unduh" + opsi **Open Hoardly at login** (SMAppService).
+- Satu `manifest.json` untuk semua browser: `background.service_worker` (Chromium, Safari) + `background.scripts` (Firefox) + `browser_specific_settings.gecko`.
+- `/add` menerima `items[]` dengan cookie per URL; nama file dari server/browser disanitasi.
+
+**Belum:** uji Firefox & Arc (tidak terpasang), Chrome manual (Load unpacked), B7 popup per-situs.
+
+## 15. Verifikasi (saat implementasi)
 - **Unit test** (`HoardlyTests`): pembagian segmen & dynamic split, parser HLS (master/media playlist, AES-128 key), resume state encode/decode.
 - **Server uji lokal** yang mendukung `Range` (mis. `caddy file-server` atau skrip kecil) + mode "tanpa Range" + mode "putus acak" → bandingkan SHA-256 hasil dengan sumber.
 - **Uji resume:** `kill -9` Hoardly di tengah download 5 GB, jalankan ulang, pastikan lanjut dan hash identik.

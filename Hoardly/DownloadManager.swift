@@ -22,6 +22,8 @@ final class DownloadManager {
         "maxConcurrent": 3,
         "connections": 8,
         "confirmBrowserDownloads": true,
+        "interceptExtensions": "zip rar 7z tar gz tgz bz2 xz iso dmg pkg exe msi apk deb rpm appimage mp4 mkv mov avi webm m4v wmv flv mp3 m4a flac wav aac ogg",
+        "interceptMinSizeMB": 0,
     ]
 
     /// Where a new file goes: the download folder, plus its category subfolder when organizing (Q2).

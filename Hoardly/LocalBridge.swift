@@ -39,7 +39,15 @@ final class LocalBridge {
 
     let token: String
     private(set) var status = "Starting…"
-    var onAdd: ((URL, [String: String]) -> Void)?
+    var onAdd: (([IncomingDownload]) -> Void)?
+
+    struct IncomingDownload: Equatable {
+        let url: URL
+        var headers: [String: String]
+        var fileName: String?
+    }
+
+    static let maxItems = 500
     private var listener: NWListener?
 
     init() {
@@ -116,19 +124,39 @@ final class LocalBridge {
         switch request.path {
         case "/ping":
             record("ping via \(via), token \(authorized ? "ok" : "missing/wrong") — \(browser)")
-            return (200, ["app": "Hoardly", "authorized": authorized])
+            return (200, ["app": "Hoardly", "authorized": authorized, "rules": Self.rules])
         case "/add":
             guard authorized else { return (401, ["error": "pair the extension with the token shown in Hoardly"]) }
-            guard let string = body["url"] as? String, let url = URL(string: string),
-                  ["http", "https"].contains(url.scheme?.lowercased()) else {
-                return (400, ["error": "url must be http(s)"])
+            guard let items = Self.downloads(from: body) else {
+                return (400, ["error": "items must be 1–\(Self.maxItems) http(s) URLs"])
             }
-            record("add via \(via): \(url.absoluteString)")
-            onAdd?(url, Self.headers(from: body))
+            record("add via \(via): \(items.map(\.url.absoluteString).joined(separator: " "))")
+            onAdd?(items)
             return (200, ["ok": true])
         default:
             return (404, ["error": "unknown path"])
         }
+    }
+
+    /// `{"items": [{"url", "cookie"?, "filename"?}], "referrer"?, "userAgent"?}`; nil if any URL isn't http(s).
+    static func downloads(from body: [String: Any]) -> [IncomingDownload]? {
+        guard let items = body["items"] as? [[String: Any]], (1...maxItems).contains(items.count) else { return nil }
+        let shared = headers(from: body)
+        var result: [IncomingDownload] = []
+        for item in items {
+            guard let string = item["url"] as? String, let url = URL(string: string),
+                  ["http", "https"].contains(url.scheme?.lowercased()), url.host() != nil else { return nil }
+            let name = (item["filename"] as? String).flatMap { $0.isEmpty ? nil : SegmentedDownload.safeName($0) }
+            result.append(IncomingDownload(url: url, headers: shared.merging(headers(from: item)) { $1 }, fileName: name))
+        }
+        return result
+    }
+
+    /// B4: which browser downloads the extensions hand over. Edited in Settings → Browsers.
+    static var rules: [String: Any] {
+        let extensions = (UserDefaults.standard.string(forKey: "interceptExtensions") ?? "")
+            .lowercased().split(whereSeparator: { $0 == " " || $0 == "," }).map { $0.trimmingCharacters(in: CharacterSet(charactersIn: ".")) }
+        return ["extensions": extensions, "minSize": UserDefaults.standard.integer(forKey: "interceptMinSizeMB") * 1_000_000]
     }
 
     /// Browser context the server may need (login cookies, hotlink checks). CR/LF dropped to block header injection.

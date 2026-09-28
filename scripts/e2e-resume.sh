@@ -37,7 +37,7 @@ print({'pct': int(100*r/t) if t else 0, 'state': list(d['state'])[0], 'segments'
 
 launch
 curl -sf -X POST http://127.0.0.1:47801/add -H "X-Hoardly-Token: $(defaults read id.haonlabs.hoardly bridgeToken)" \
-  -d '{"url":"http://127.0.0.1:8765/blob.bin"}' >/dev/null
+  -d '{"items":[{"url":"http://127.0.0.1:8765/blob.bin"}]}' >/dev/null
 until [ "$(field pct)" -ge 50 ]; do [ "$(field state)" = failed ] && { echo "FAIL: download failed"; exit 1; }; sleep 0.2; done
 pkill -9 -x Hoardly
 echo "killed at $(field pct)% with $(field segments) segments"

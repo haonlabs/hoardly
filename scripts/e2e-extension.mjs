@@ -57,7 +57,7 @@ fs.writeFileSync(`${site}/page.html`, `<!doctype html><script>document.cookie = 
 <a id="alt" href="/alt.zip" style="position:absolute;left:0;top:0;width:200px;height:100px;display:block">alt</a>
 <a href="/all1.iso" style="margin-top:120px;display:block">1</a><a href="/all2.dmg">2</a><a href="/readme.html">not a download</a>`);
 
-const server = spawn('python3', [`${root}/scripts/range_server.py`, site, '--port', '8768']);
+const server = spawn('python3', [`${root}/scripts/range_server.py`, site, '--port', '8768', '--cookie-log', `${work}/cookies.log`]);
 sh('pkill -x Hoardly || true');
 const backup = fs.existsSync(store) ? fs.readFileSync(store) : null;
 fs.rmSync(store, { force: true });
@@ -80,8 +80,13 @@ try {
   const worker = await until(async () => (await targets()).find((t) => t.type === 'service_worker' && t.url.endsWith('/background.js')));
   check(worker, 'extension service worker running');
   const sw = cdp(worker.webSocketDebuggerUrl);
-  const paired = await sw.eval(`chrome.storage.local.set({ token: ${JSON.stringify(token)} }).then(ping).then(JSON.stringify)`);
-  check(JSON.parse(paired ?? '{}').authorized, `paired: ${paired}`);
+  // One-click pairing: on install the extension asks; Hoardly shows a dialog; Return = Connect.
+  const clickConnect = `osascript -e 'tell application "System Events" to tell process "Hoardly" to click (first button whose title is "Connect") of (first window whose subrole is "AXDialog")'`;
+  check(await until(() => { try { sh(clickConnect); return true; } catch { return false; } }), 'Hoardly asked to connect');
+  const stored = await until(() => sw.eval('chrome.storage.local.get("token").then((s) => s.token)'));
+  check(stored === token, 'paired by confirming the Hoardly dialog');
+  const paired = await sw.eval('ping().then(JSON.stringify)');
+  check(JSON.parse(paired ?? '{}').authorized, `authorized: ${paired}`);
 
   const page = cdp((await targets()).find((t) => t.type === 'page').webSocketDebuggerUrl);
   const go = async (url) => { await page.call('Page.enable'); await page.call('Page.navigate', { url }); await sleep(1500); };
@@ -91,7 +96,9 @@ try {
   await go('http://127.0.0.1:8768/take.zip');
   const taken = await until(() => storeItems().find((d) => d.url.endsWith('/take.zip') && 'completed' in d.state));
   check(taken, 'take.zip downloaded by Hoardly');
-  check(taken?.headers?.Cookie?.includes('session=abc123'), `cookie forwarded (${taken?.headers?.Cookie})`);
+  const sentCookies = fs.readFileSync(`${work}/cookies.log`, 'utf8').split('\n').filter((l) => l.startsWith('/take.zip'));
+  check(sentCookies.length && sentCookies.every((l) => l.includes('session=abc123')), 'site cookie reached the download server');
+  check(taken && !taken.headers?.Cookie, 'cookie not kept on disk after the download finished');
   check(!fs.existsSync(`${browserDownloads}/take.zip`), 'browser did not also save take.zip');
 
   // ⌥-click: the browser keeps it.

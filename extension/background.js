@@ -47,6 +47,20 @@ async function ping() {
   }
 }
 
+// One-click pairing: Hoardly asks the user, then hands over the token.
+async function pair() {
+  try {
+    const reply = await sendAny('/pair', { userAgent: navigator.userAgent });
+    if (reply.token) {
+      await api.storage.local.set({ token: reply.token });
+      return ping();
+    }
+    return reply;
+  } catch (error) {
+    return { error: String(error?.message ?? error) };
+  }
+}
+
 // ---- Hand-off --------------------------------------------------------------
 
 async function cookieHeader(url) {
@@ -169,6 +183,9 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'ping':
       ping().then(sendResponse);
       return true;
+    case 'pair':
+      pair().then(sendResponse);
+      return true;
     case 'config': // Safari has no downloads API, so its content script intercepts link clicks instead
       loaded.then(() => sendResponse({ rules, interceptClicks: !api.downloads }));
       return true;
@@ -196,5 +213,9 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-api.runtime.onInstalled.addListener(ping);
+// Freshly installed and Hoardly is running but doesn't know us yet: ask to connect right away.
+api.runtime.onInstalled.addListener(async () => {
+  const reply = await ping();
+  if (reply.status && !reply.authorized) pair();
+});
 api.runtime.onStartup.addListener(ping);

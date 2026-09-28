@@ -3,9 +3,19 @@ const list = document.getElementById('list');
 const empty = document.getElementById('empty');
 const status = document.getElementById('status');
 
-api.runtime.sendMessage({ type: 'ping' }).then((r) => {
-  status.textContent = r?.authorized ? '● Connected' : r?.status ? 'Not paired — open Options' : 'Hoardly isn’t running';
-});
+function showStatus(r) {
+  if (r?.authorized) return (status.textContent = '● Connected');
+  if (!r?.status) return (status.textContent = 'Hoardly isn’t running');
+  status.textContent = '';
+  const connect = document.createElement('button');
+  connect.textContent = 'Connect to Hoardly';
+  connect.addEventListener('click', async () => {
+    connect.textContent = 'Check Hoardly…'; // the app shows a confirmation dialog
+    showStatus(await api.runtime.sendMessage({ type: 'pair' }));
+  });
+  status.replaceChildren(connect);
+}
+api.runtime.sendMessage({ type: 'ping' }).then(showStatus);
 
 (async () => {
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });

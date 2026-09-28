@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Network
 import Observation
@@ -38,7 +39,7 @@ final class LocalBridge {
     static let allowedOrigins = ["chrome-extension://", "moz-extension://", "safari-web-extension://"]
 
     let token: String
-    private(set) var status = "Starting…"
+    private(set) var status = String(localized: "Starting…")
     var onAdd: (([IncomingDownload]) -> Void)?
 
     struct IncomingDownload: Equatable {
@@ -68,8 +69,8 @@ final class LocalBridge {
             listener.stateUpdateHandler = { [weak self] state in
                 MainActor.assumeIsolated {
                     switch state {
-                    case .ready: self?.status = "Listening on 127.0.0.1:\(Self.port)"
-                    case .failed(let error): self?.status = "Bridge failed: \(error)"
+                    case .ready: self?.status = String(localized: "Listening on 127.0.0.1:\(Int(Self.port.rawValue))")
+                    case .failed(let error): self?.status = String(localized: "Bridge failed: \(error.localizedDescription)")
                     default: break
                     }
                 }
@@ -83,7 +84,7 @@ final class LocalBridge {
             listener.start(queue: .main)
             self.listener = listener
         } catch {
-            status = "Bridge failed: \(error)"
+            status = String(localized: "Bridge failed: \(error.localizedDescription)")
         }
     }
 
@@ -103,7 +104,14 @@ final class LocalBridge {
     }
 
     private func reply(_ connection: NWConnection, to request: HTTPRequest) {
+        if request.path == "/pair", request.method == "POST", Self.originAllowed(request) {
+            return pair(connection, request)
+        }
         let (status, json) = handle(request)
+        send(connection, status, json)
+    }
+
+    private func send(_ connection: NWConnection, _ status: Int, _ json: [String: Any]) {
         let body = (try? JSONSerialization.data(withJSONObject: json)) ?? Data("{}".utf8)
         let head = "HTTP/1.1 \(status) \(HTTPURLResponse.localizedString(forStatusCode: status))\r\n"
             + "Content-Type: application/json\r\nContent-Length: \(body.count)\r\nConnection: close\r\n\r\n"
@@ -112,10 +120,7 @@ final class LocalBridge {
 
     func handle(_ request: HTTPRequest) -> (Int, [String: Any]) {
         let origin = request.headers["origin"]
-        // Web pages must never reach the bridge; only extensions (Origin) or the Safari app extension (no Origin).
-        if let origin, !Self.allowedOrigins.contains(where: origin.hasPrefix) {
-            return (403, ["error": "origin not allowed"])
-        }
+        guard Self.originAllowed(request) else { return (403, ["error": "origin not allowed"]) }
         guard request.method == "POST" else { return (405, ["error": "use POST"]) }
         let authorized = request.headers["x-hoardly-token"] == token
         let body = (try? JSONSerialization.jsonObject(with: request.body)) as? [String: Any] ?? [:]
@@ -137,6 +142,43 @@ final class LocalBridge {
         default:
             return (404, ["error": "unknown path"])
         }
+    }
+
+    /// Web pages must never reach the bridge; only extensions (Origin) or the Safari app extension (no Origin).
+    static func originAllowed(_ request: HTTPRequest) -> Bool {
+        request.headers["origin"].map { origin in allowedOrigins.contains(where: origin.hasPrefix) } ?? true
+    }
+
+    /// One-click pairing: the extension asks, the user confirms in Hoardly, the extension gets the token.
+    /// The token never leaves without that click, so a rogue extension can't pair silently.
+    private var asking = false
+
+    private func pair(_ connection: NWConnection, _ request: HTTPRequest) {
+        guard !asking else { return send(connection, 409, ["error": "Hoardly is already asking"]) }
+        asking = true
+        let body = (try? JSONSerialization.jsonObject(with: request.body)) as? [String: Any] ?? [:]
+        let browser = Self.browserName(userAgent: body["userAgent"] as? String ?? "")
+        DispatchQueue.main.async { // not inside the network callback: runModal spins its own loop
+            NSApp.activate()
+            let alert = NSAlert()
+            alert.messageText = String(localized: "Connect \(browser) to Hoardly?")
+            alert.informativeText = String(localized: "The Hoardly extension in \(browser) will send downloads here. Only allow this if you just installed or reset the extension.")
+            alert.addButton(withTitle: String(localized: "Connect"))
+            alert.addButton(withTitle: String(localized: "Don’t Allow"))
+            let allowed = alert.runModal() == .alertFirstButtonReturn
+            self.asking = false
+            self.record("pair \(browser): \(allowed ? "allowed" : "refused")")
+            self.send(connection, allowed ? 200 : 403, allowed ? ["authorized": true, "token": self.token] : ["error": "not allowed"])
+        }
+    }
+
+    static func browserName(userAgent ua: String) -> String {
+        if ua.contains("Firefox/") { return "Firefox" }
+        if ua.contains("Edg/") { return "Microsoft Edge" }
+        if ua.contains("OPR/") { return "Opera" }
+        if ua.contains("Chrome/") { return "Chrome / Chromium" } // Helium, Arc, Brave, Vivaldi all report as Chrome
+        if ua.contains("Safari/") { return "Safari" }
+        return String(localized: "your browser")
     }
 
     /// `{"items": [{"url", "cookie"?, "filename"?}], "referrer"?, "userAgent"?}`; nil if any URL isn't http(s).

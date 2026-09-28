@@ -1,3 +1,4 @@
+import Sparkle
 import SwiftUI
 
 @main
@@ -5,6 +6,8 @@ struct HoardlyApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     private let manager = DownloadManager() // App is created once; @Observable does the view updates
     private let bridge = LocalBridge()
+    private let updater = SPUStandardUpdaterController(startingUpdater: !DownloadManager.isTesting,
+                                                       updaterDelegate: nil, userDriverDelegate: nil)
 
     init() {
         guard !DownloadManager.isTesting else { return }
@@ -22,6 +25,7 @@ struct HoardlyApp: App {
     var body: some Scene {
         Window("Hoardly", id: "main") {
             MainView(manager: manager)
+                .modifier(ShowWelcomeOnFirstLaunch())
         }
         .defaultSize(width: 1100, height: 560)
         .commands {
@@ -29,7 +33,16 @@ struct HoardlyApp: App {
                 Button("New Download…") { NewDownloadPanel.show(manager: manager) }
                     .keyboardShortcut("n")
             }
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") { updater.checkForUpdates(nil) }
+            }
+            CommandGroup(after: .appSettings) { SetUpBrowsersButton() }
         }
+
+        Window("Welcome to Hoardly", id: "welcome") {
+            WelcomeView(bridge: bridge)
+        }
+        .windowResizability(.contentSize)
 
         Settings {
             SettingsView(bridge: bridge)
@@ -79,4 +92,18 @@ private struct MenuBarView: View {
         .padding()
         .frame(width: 320)
     }
+}
+
+private struct ShowWelcomeOnFirstLaunch: ViewModifier {
+    @Environment(\.openWindow) private var openWindow
+    @AppStorage("onboarded") private var onboarded = false
+
+    func body(content: Content) -> some View {
+        content.task { if !onboarded && !DownloadManager.isTesting { openWindow(id: "welcome") } }
+    }
+}
+
+private struct SetUpBrowsersButton: View {
+    @Environment(\.openWindow) private var openWindow
+    var body: some View { Button("Set Up Browsers…") { openWindow(id: "welcome") } }
 }

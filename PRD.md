@@ -270,7 +270,24 @@ Estimasi total: ~12–15 minggu untuk 1 developer.
 
 **Belum:** DASH (M5, P2), live stream, verifikasi export di macOS 14.
 
-## 16. Verifikasi (saat implementasi)
+## 16. M6 — Persiapan Rilis (2026-09-28)
+| Item | Status |
+|---|---|
+| Ikon app (AppIcon 16–1024), ikon ekstensi 16–128, logo terang/gelap, aset toko | ✅ `scripts/make-icons.swift` |
+| Onboarding: browser terpasang terdeteksi, status ekstensi Safari, Open at login | ✅ jendela Welcome (juga di menu "Set Up Browsers…") |
+| **Pairing satu klik** (menggantikan salin token): ekstensi → `/pair` → dialog "Connect" di app → token | ✅ e2e Helium (dialog diklik otomatis); token manual tetap ada |
+| Sparkle 2.10 (SPM), menu "Check for Updates…", feed `github.com/haonlabs/hoardly/releases/latest/download/appcast.xml` | ✅ terpasang; `SUPublicEDKey` dibuat oleh `scripts/release.sh keys` |
+| `scripts/release.sh`: archive → Developer ID → DMG → notarize → staple → appcast | ✅ mode `--local` teruji (DMG universal 2,2 MB); mode penuh butuh akun |
+| `scripts/package-extension.sh`: satu ZIP untuk Chrome/Edge/Firefox, tanpa `nativeMessaging` | ✅ |
+| README, PRIVACY.md, `docs/store-listing.md` (deskripsi + justifikasi permission) | ✅ |
+| Lokalisasi Bahasa Indonesia (String Catalog, 84 string) | ✅ diverifikasi via screenshot |
+| Privasi: cookie dihapus dari `downloads.json` begitu unduhan selesai | ✅ diuji e2e |
+
+**Menunggu akun (dikerjakan pemilik):** Apple Developer Program (Developer ID + notarization), Chrome Web Store / Edge Add-ons / Firefox AMO, repo publik `haonlabs/hoardly`, lalu `scripts/release.sh keys` → rilis pertama.
+
+**Belum:** ikon menu bar kustom, lokalisasi teks ekstensi, verifikasi macOS 14.
+
+## 17. Verifikasi (saat implementasi)
 - **Unit test** (`HoardlyTests`): pembagian segmen & dynamic split, parser HLS (master/media playlist, AES-128 key), resume state encode/decode.
 - **Server uji lokal** yang mendukung `Range` (mis. `caddy file-server` atau skrip kecil) + mode "tanpa Range" + mode "putus acak" → bandingkan SHA-256 hasil dengan sumber.
 - **Uji resume:** `kill -9` Hoardly di tengah download 5 GB, jalankan ulang, pastikan lanjut dan hash identik.

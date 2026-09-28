@@ -1,0 +1,846 @@
+{
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "1. Add Hoardly to your browsers": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Tambahkan Hoardly ke browser Anda"
+          }
+        }
+      }
+    },
+    "2. Connect": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Hubungkan"
+          }
+        }
+      }
+    },
+    "3. Stay ready": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Selalu siap"
+          }
+        }
+      }
+    },
+    "Address": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alamat"
+          }
+        }
+      }
+    },
+    "All": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semua"
+          }
+        }
+      }
+    },
+    "Archives": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arsip"
+          }
+        }
+      }
+    },
+    "Ask before starting downloads sent from the browser": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanya dulu sebelum memulai unduhan dari browser"
+          }
+        }
+      }
+    },
+    "Bridge failed: %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koneksi browser gagal: %@"
+          }
+        }
+      }
+    },
+    "Browser downloads": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan browser"
+          }
+        }
+      }
+    },
+    "Browsers": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browser"
+          }
+        }
+      }
+    },
+    "Browsers can only hand downloads to Hoardly while it's running; otherwise they download as usual.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browser hanya bisa menyerahkan unduhan ke Hoardly saat Hoardly berjalan; jika tidak, browser mengunduh seperti biasa."
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Batal"
+          }
+        }
+      }
+    },
+    "Categories": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kategori"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periksa Pembaruan…"
+          }
+        }
+      }
+    },
+    "Choose…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih…"
+          }
+        }
+      }
+    },
+    "Completed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selesai"
+          }
+        }
+      }
+    },
+    "Connect": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungkan"
+          }
+        }
+      }
+    },
+    "Connect %@ to Hoardly?": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungkan %@ ke Hoardly?"
+          }
+        }
+      }
+    },
+    "Connections per download: %lld": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koneksi per unduhan: %lld"
+          }
+        }
+      }
+    },
+    "Copy": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salin"
+          }
+        }
+      }
+    },
+    "Copy Address": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salin Alamat"
+          }
+        }
+      }
+    },
+    "Documents": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dokumen"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selesai"
+          }
+        }
+      }
+    },
+    "Don’t Allow": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jangan Izinkan"
+          }
+        }
+      }
+    },
+    "Download Later": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduh Nanti"
+          }
+        }
+      }
+    },
+    "Download addresses, one per line": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alamat unduhan, satu per baris"
+          }
+        }
+      }
+    },
+    "Download complete": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan selesai"
+          }
+        }
+      }
+    },
+    "Download failed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan gagal"
+          }
+        }
+      }
+    },
+    "Download folder": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder unduhan"
+          }
+        }
+      }
+    },
+    "Downloading": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mengunduh"
+          }
+        }
+      }
+    },
+    "Failed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gagal"
+          }
+        }
+      }
+    },
+    "Faster, resumable downloads from every browser.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan lebih cepat dan bisa dilanjutkan, dari browser apa pun."
+          }
+        }
+      }
+    },
+    "File name": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama file"
+          }
+        }
+      }
+    },
+    "Files": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        }
+      }
+    },
+    "General": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umum"
+          }
+        }
+      }
+    },
+    "Get Extension": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasang Ekstensi"
+          }
+        }
+      }
+    },
+    "Hold ⌥ Option while clicking a link to let the browser download it instead.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahan ⌥ Option saat mengeklik tautan agar browser yang mengunduhnya."
+          }
+        }
+      }
+    },
+    "Listening on 127.0.0.1:%lld": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siap di 127.0.0.1:%lld"
+          }
+        }
+      }
+    },
+    "Move Files to Trash": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pindahkan File ke Tong Sampah"
+          }
+        }
+      }
+    },
+    "Music": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Musik"
+          }
+        }
+      }
+    },
+    "Name": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama"
+          }
+        }
+      }
+    },
+    "New Download": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan Baru"
+          }
+        }
+      }
+    },
+    "New Download…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan Baru…"
+          }
+        }
+      }
+    },
+    "No active downloads": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak ada unduhan aktif"
+          }
+        }
+      }
+    },
+    "Open Hoardly": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Hoardly"
+          }
+        }
+      }
+    },
+    "Open Hoardly at login": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Hoardly saat login"
+          }
+        }
+      }
+    },
+    "Other": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lainnya"
+          }
+        }
+      }
+    },
+    "Pairing token": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Token pemasangan"
+          }
+        }
+      }
+    },
+    "Paste the token into the Hoardly extension's settings in Safari, Chrome, Helium or Firefox.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempel token ke pengaturan ekstensi Hoardly di Safari, Chrome, Helium, atau Firefox."
+          }
+        }
+      }
+    },
+    "Pause": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda"
+          }
+        }
+      }
+    },
+    "Paused · %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dijeda · %@"
+          }
+        }
+      }
+    },
+    "Programs": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Program"
+          }
+        }
+      }
+    },
+    "Progress": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progres"
+          }
+        }
+      }
+    },
+    "Quality": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kualitas"
+          }
+        }
+      }
+    },
+    "Queued": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antre"
+          }
+        }
+      }
+    },
+    "Queued & Paused": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antre & Dijeda"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keluar"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus"
+          }
+        }
+      }
+    },
+    "Remove %lld download(s)?": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus %lld unduhan?"
+          }
+        }
+      }
+    },
+    "Remove from List": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus dari Daftar"
+          }
+        }
+      }
+    },
+    "Remove…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus…"
+          }
+        }
+      }
+    },
+    "Resume": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lanjutkan"
+          }
+        }
+      }
+    },
+    "Save to": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simpan ke"
+          }
+        }
+      }
+    },
+    "Set Up Browsers…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atur Browser…"
+          }
+        }
+      }
+    },
+    "Show in Finder": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tampilkan di Finder"
+          }
+        }
+      }
+    },
+    "Simultaneous downloads: %lld": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduhan bersamaan: %lld"
+          }
+        }
+      }
+    },
+    "Size": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ukuran"
+          }
+        }
+      }
+    },
+    "Sort into category folders (Video, Music, Archives…)": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kelompokkan ke folder kategori (Video, Music, Archives…)"
+          }
+        }
+      }
+    },
+    "Speed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kecepatan"
+          }
+        }
+      }
+    },
+    "Start Download": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mulai Unduh"
+          }
+        }
+      }
+    },
+    "Starting…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memulai…"
+          }
+        }
+      }
+    },
+    "Status": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "Take over files of type": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil alih file berjenis"
+          }
+        }
+      }
+    },
+    "The Hoardly extension in %@ will send downloads here. Only allow this if you just installed or reset the extension.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekstensi Hoardly di %@ akan mengirim unduhan ke sini. Izinkan hanya jika Anda baru saja memasang atau mengatur ulang ekstensinya."
+          }
+        }
+      }
+    },
+    "The first time a browser's extension reaches Hoardly, a dialog asks you to connect it. Click Connect.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saat ekstensi di sebuah browser pertama kali menghubungi Hoardly, muncul dialog untuk menghubungkannya. Klik Hubungkan."
+          }
+        }
+      }
+    },
+    "Time Left": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sisa Waktu"
+          }
+        }
+      }
+    },
+    "Turn On in Safari…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan di Safari…"
+          }
+        }
+      }
+    },
+    "Turned on": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktif"
+          }
+        }
+      }
+    },
+    "Unfinished downloads lose their partial data.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data unduhan yang belum selesai akan hilang."
+          }
+        }
+      }
+    },
+    "Video": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video"
+          }
+        }
+      }
+    },
+    "Welcome to Hoardly": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selamat datang di Hoardly"
+          }
+        }
+      }
+    },
+    "your browser": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "browser Anda"
+          }
+        }
+      }
+    },
+    "…and any file over %lld MB": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "…dan file apa pun di atas %lld MB"
+          }
+        }
+      }
+    },
+    "…and any file: off": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "…dan file apa pun: nonaktif"
+          }
+        }
+      }
+    }
+  }
+}

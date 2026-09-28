@@ -4,10 +4,20 @@ const result = document.getElementById('result');
 
 api.storage.local.get('token').then(({ token }) => { input.value = token ?? ''; });
 
+function show(r) {
+  result.textContent = r?.authorized ? `✅ Connected to Hoardly (via ${r.via})`
+    : r?.status ? '❌ Not connected — the request was declined or the token is wrong'
+    : `❌ Hoardly isn’t running (${r?.error ?? 'no response'})`;
+}
+
+document.getElementById('connect').addEventListener('click', async () => {
+  result.textContent = 'Confirm in the Hoardly window…';
+  show(await api.runtime.sendMessage({ type: 'pair' }));
+});
+
 document.getElementById('save').addEventListener('click', async () => {
   await api.storage.local.set({ token: input.value.trim() });
-  const r = await api.runtime.sendMessage({ type: 'ping' });
-  result.textContent = r.authorized ? `✅ Paired with Hoardly (via ${r.via})`
-    : r.status ? '❌ Token rejected — copy it again from the Hoardly window'
-    : `❌ Hoardly not reachable — is the app running? (${r.error ?? 'no response'})`;
+  show(await api.runtime.sendMessage({ type: 'ping' }));
 });
+
+api.runtime.sendMessage({ type: 'ping' }).then(show);

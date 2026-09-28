@@ -19,23 +19,10 @@ private struct GeneralSettings: View {
     @AppStorage("organizeByCategory") private var organize = true
     @AppStorage("maxConcurrent") private var maxConcurrent = 3
     @AppStorage("connections") private var connections = 8
-    @State private var openAtLogin = SMAppService.mainApp.status == .enabled
-    @State private var loginError: String?
 
     var body: some View {
         Form {
-            // B6: extensions can only hand downloads to a running app; otherwise the browser keeps them.
-            Toggle("Open Hoardly at login", isOn: $openAtLogin)
-                .onChange(of: openAtLogin) { _, on in
-                    do {
-                        try on ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
-                        loginError = nil
-                    } catch {
-                        loginError = error.localizedDescription
-                        openAtLogin = SMAppService.mainApp.status == .enabled
-                    }
-                }
-            if let loginError { Text(loginError).font(.caption).foregroundStyle(.red) }
+            OpenAtLoginToggle()
             LabeledContent("Download folder") {
                 HStack {
                     Text(directory).lineLimit(1).truncationMode(.middle).foregroundStyle(.secondary)
@@ -89,5 +76,25 @@ private struct BrowserSettings: View {
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
+    }
+}
+
+/// B6: extensions can only hand downloads to a running app; otherwise the browser keeps them.
+struct OpenAtLoginToggle: View {
+    @State private var on = SMAppService.mainApp.status == .enabled
+    @State private var error: String?
+
+    var body: some View {
+        Toggle("Open Hoardly at login", isOn: $on)
+            .onChange(of: on) { _, wanted in
+                do {
+                    try wanted ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
+                    error = nil
+                } catch {
+                    self.error = error.localizedDescription
+                    on = SMAppService.mainApp.status == .enabled
+                }
+            }
+        if let error { Text(error).font(.caption).foregroundStyle(.red) }
     }
 }

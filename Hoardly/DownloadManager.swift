@@ -132,6 +132,7 @@ final class DownloadManager {
             samples[update.id] = nil
             speeds[update.id] = nil
             if previous == .running, update.state != .paused { Notifier.notify(update) }
+            if update.state == .completed { downloads[i].headers["Cookie"] = nil } // only needed to resume; don't keep it on disk
             schedule()
         }
         save()

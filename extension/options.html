@@ -1,7 +1,20 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>Hoardly</title>
-<label>Pairing token <input id="token" size="40" placeholder="Copy from the Hoardly window"></label>
-<button id="save">Save &amp; test</button>
-<pre id="result"></pre>
+<style>
+  :root { color-scheme: light dark; font: 14px -apple-system, system-ui, sans-serif; }
+  body { margin: 20px; max-width: 520px; }
+  p { opacity: .75; }
+  details { margin-top: 16px; }
+</style>
+<h2>Hoardly</h2>
+<p>Hoardly must be running. Click Connect, then confirm in the Hoardly dialog.</p>
+<button id="connect">Connect to Hoardly</button>
+<p id="result"></p>
+<details>
+  <summary>Pair with a token instead</summary>
+  <p>Copy the token from Hoardly → Settings → Browsers.</p>
+  <input id="token" size="40">
+  <button id="save">Save &amp; test</button>
+</details>
 <script src="options.js"></script>

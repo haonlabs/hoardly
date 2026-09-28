@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Static file server with HTTP Range support, for testing Hoardly.
 
-usage: range_server.py DIR [--port 8765] [--no-range] [--rate BYTES_PER_SEC] [--drop BYTES] [--max-conns N]
+usage: range_server.py DIR [--port 8765] [--no-range] [--rate BYTES_PER_SEC] [--drop BYTES] [--max-conns N] [--cookie-log FILE]
   --rate  throttle each connection
   --drop  cut every connection after this many bytes (exercises retry/resume)
   --max-conns  answer 429 + Retry-After beyond N concurrent transfers (like proof.ovh.net)
+  --cookie-log append '<path> <Cookie header>' for every request
 """
 import argparse, mimetypes, os, re, threading, time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -31,6 +32,9 @@ class Handler(BaseHTTPRequestHandler):
                 active -= 1
 
     def serve(self):
+        if args.cookie_log:
+            with open(args.cookie_log, 'a') as log:
+                log.write(f"{self.path} {self.headers.get('Cookie', '')}\n")
         path = os.path.join(args.dir, os.path.basename(self.path.split('?')[0]))
         if not os.path.isfile(path):
             return self.send_error(404)
@@ -77,5 +81,6 @@ parser.add_argument('--no-range', action='store_true')
 parser.add_argument('--rate', type=float, default=0)
 parser.add_argument('--drop', type=int, default=0)
 parser.add_argument('--max-conns', type=int, default=0)
+parser.add_argument('--cookie-log')
 args = parser.parse_args()
 ThreadingHTTPServer(('127.0.0.1', args.port), Handler).serve_forever()

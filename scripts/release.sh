@@ -8,7 +8,10 @@
 #                                     # with generate_keys -x) and writes its public half into Info.plist
 #
 # usage: TEAM_ID=TEAMID scripts/release.sh     # full release
-#        scripts/release.sh --local           # ad-hoc signed DMG, no notarization: checks the packaging only
+#        scripts/release.sh --adhoc           # no Apple Developer account: ad-hoc signed DMG + appcast. Gatekeeper
+#                                             # warns on first open, and Safari hides the extension unless the user
+#                                             # enables Develop → Allow Unsigned Extensions.
+#        scripts/release.sh --local           # ad-hoc DMG only: checks the packaging
 set -euo pipefail
 cd "$(dirname "$0")/.."
 DERIVED=build/DerivedData
@@ -17,16 +20,18 @@ REPO=https://github.com/haonlabs/hoardly
 
 if [ "${1:-}" = keys ]; then
   xcodebuild -project Hoardly.xcodeproj -scheme Hoardly -derivedDataPath $DERIVED -resolvePackageDependencies -quiet
-  KEY=$("$SPARKLE_BIN/generate_keys" -p 2>/dev/null || "$SPARKLE_BIN/generate_keys" | awk '/<string>/{gsub(/.*<string>|<\/string>.*/,""); print}')
+  # -p prints the existing public key (errors go to stdout, hence the exit-code check); otherwise create one.
+  KEY=$("$SPARKLE_BIN/generate_keys" -p) || { "$SPARKLE_BIN/generate_keys" >/dev/null; KEY=$("$SPARKLE_BIN/generate_keys" -p); }
   /usr/libexec/PlistBuddy -c "Delete :SUPublicEDKey" Hoardly/Info.plist 2>/dev/null || true
   /usr/libexec/PlistBuddy -c "Add :SUPublicEDKey string $KEY" Hoardly/Info.plist
   echo "SUPublicEDKey = $KEY (written to Hoardly/Info.plist — commit it)"
   exit 0
 fi
 
-LOCAL=false; [ "${1:-}" = --local ] && LOCAL=true
-if $LOCAL; then
+MODE=${1:-full}
+if [ "$MODE" != full ]; then
   SIGN=(CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual)
+  [ "$MODE" = --adhoc ] && { /usr/libexec/PlistBuddy -c "Print :SUPublicEDKey" Hoardly/Info.plist >/dev/null || { echo "Run scripts/release.sh keys first"; exit 1; }; }
 else
   : "${TEAM_ID:?set TEAM_ID to your Apple Developer team ID}"
   /usr/libexec/PlistBuddy -c "Print :SUPublicEDKey" Hoardly/Info.plist >/dev/null || { echo "Run scripts/release.sh keys first"; exit 1; }
@@ -48,14 +53,17 @@ cp -R "$APP" build/dmg/
 ln -s /Applications build/dmg/Applications
 hdiutil create -volname "Hoardly $VERSION" -srcfolder build/dmg -format UDZO -ov "$DMG" -quiet
 
-if ! $LOCAL; then
+if [ "$MODE" = full ]; then
   codesign --sign "Developer ID Application" --timestamp "$DMG"
   echo "▸ Notarizing (takes a few minutes)"
   xcrun notarytool submit "$DMG" --keychain-profile hoardly-notary --wait
   xcrun stapler staple "$DMG"
   spctl --assess --type open --context context:primary-signature "$DMG"
+fi
+if [ "$MODE" != --local ]; then
   echo "▸ Appcast"
-  "$SPARKLE_BIN/generate_appcast" dist --download-url-prefix "$REPO/releases/download/v$VERSION/" -o dist/appcast.xml
+  rm -rf build/appcast && mkdir -p build/appcast && cp "$DMG" build/appcast/ # only app archives; dist/ also holds the extension zip
+  "$SPARKLE_BIN/generate_appcast" build/appcast --download-url-prefix "$REPO/releases/download/v$VERSION/" -o dist/appcast.xml
   echo "Next: gh release create v$VERSION $DMG dist/appcast.xml --title \"Hoardly $VERSION\""
 fi
 echo "✔ $DMG"

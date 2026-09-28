@@ -2,16 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Sparkle: updates come from the latest GitHub release's appcast. SUPublicEDKey is set by scripts/release.sh setup. -->
-	<key>SUFeedURL</key>
-	<string>https://github.com/haonlabs/hoardly/releases/latest/download/appcast.xml</string>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<!-- A download manager has to fetch whatever URL the user hands it, including plain http. -->
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://github.com/haonlabs/hoardly/releases/latest/download/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>qThiraYO4FtrvpIa8jBtvihcnldt0VnRQQoa3qsX98Y=</string>
 </dict>
 </plist>

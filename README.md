@@ -23,6 +23,9 @@ Requires macOS 14 or later.
 1. Download the latest `Hoardly-x.y.z.dmg` from [Releases](https://github.com/haonlabs/hoardly/releases) and drag Hoardly to Applications.
 2. Open Hoardly — the welcome window walks you through the browser setup.
 
+> **Current builds aren't notarized by Apple yet.** The first time you open Hoardly, macOS says it can't verify the developer: open **System Settings → Privacy & Security** and click **Open Anyway**. Updates after that install normally.
+> Safari only lists extensions from non-notarized apps when **Safari → Settings → Advanced → Show features for web developers** is on and **Develop → Allow Unsigned Extensions** is checked (Safari clears that each time it quits). The Chrome, Edge and Firefox extensions are not affected.
+
 ## Browser extension
 
 | Browser | Get it |

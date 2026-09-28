@@ -7,7 +7,7 @@ usage: range_server.py DIR [--port 8765] [--no-range] [--rate BYTES_PER_SEC] [--
   --max-conns  answer 429 + Retry-After beyond N concurrent transfers (like proof.ovh.net)
   --cookie-log append '<path> <Cookie header>' for every request
 """
-import argparse, mimetypes, os, re, threading, time
+import argparse, mimetypes, os, re, threading, time, urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -35,7 +35,7 @@ class Handler(BaseHTTPRequestHandler):
         if args.cookie_log:
             with open(args.cookie_log, 'a') as log:
                 log.write(f"{self.path} {self.headers.get('Cookie', '')}\n")
-        path = os.path.join(args.dir, os.path.basename(self.path.split('?')[0]))
+        path = os.path.join(args.dir, os.path.basename(urllib.parse.unquote(self.path.split('?')[0])))
         if not os.path.isfile(path):
             return self.send_error(404)
         size = os.path.getsize(path)

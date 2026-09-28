@@ -1,5 +1,17 @@
 import Foundation
 
+nonisolated protocol DownloadEngine: Sendable {
+    func start()
+    func pause()
+}
+
+nonisolated struct StreamProgress: Codable, Equatable, Sendable {
+    var variant: URL? // quality picked in the New Download panel; nil = highest bandwidth
+    var segments = 0
+    var done = 0
+    var bytes: Int64 = 0
+}
+
 /// A byte range of the file, fetched by one connection at a time.
 nonisolated struct Segment: Codable, Equatable, Sendable {
     var start: Int64
@@ -27,9 +39,16 @@ nonisolated struct Download: Codable, Identifiable, Sendable {
     var segments: [Segment] = []
     var state: State = .queued
     var addedAt = Date()
+    var stream: StreamProgress? // set for HLS; nil for plain files
 
-    var received: Int64 { segments.reduce(0) { $0 + $1.received } }
-    var partURL: URL { directory.appending(path: "\(id.uuidString).hoardly-part") }
+    var received: Int64 { stream?.bytes ?? segments.reduce(0) { $0 + $1.received } }
+    /// 0…1 when known: bytes for files, segments for streams.
+    var fraction: Double? {
+        if let stream { return stream.segments > 0 ? Double(stream.done) / Double(stream.segments) : nil }
+        guard let totalBytes, totalBytes > 0 else { return nil }
+        return Double(received) / Double(totalBytes)
+    }
+    var partURL: URL { directory.appending(path: "\(id.uuidString)" + (stream == nil ? ".hoardly-part" : ".hoardly-hls")) }
     var displayName: String { fileName ?? url.lastPathComponent }
     var category: Category { Category(fileName: displayName) }
     var fileURL: URL? { state == .completed ? directory.appending(path: displayName) : nil }

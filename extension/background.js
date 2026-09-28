@@ -58,11 +58,12 @@ async function cookieHeader(url) {
 }
 
 // True once Hoardly has the download(s); false means the browser has to keep them.
-async function handoff(urls, { referrer, filename } = {}) {
+async function handoff(urls, { referrer, filename, kind } = {}) {
   const items = await Promise.all(urls.map(async (url) => ({
     url,
     cookie: await cookieHeader(url),
     filename: urls.length === 1 ? filename : undefined,
+    kind: kind ?? (mediaKind(url) === 'hls' ? 'hls' : undefined),
   })));
   try {
     return (await sendAny('/add', { items, referrer, userAgent: navigator.userAgent })).status === 200;
@@ -122,9 +123,44 @@ api.contextMenus.onClicked.addListener(async (info, tab) => {
     if (links?.length) handoff(links, { referrer: info.pageUrl });
     return;
   }
-  const url = info.linkUrl ?? info.srcUrl;
+  let url = info.linkUrl ?? info.srcUrl;
+  if (/^blob:/.test(url)) { // an HLS player's <video>: take the stream the page loaded instead
+    const stream = [...(media.get(tab.id)?.values() ?? [])].find((m) => m.kind === 'hls');
+    if (!stream || isYouTube(new URL(info.pageUrl).hostname)) return;
+    return handoff([stream.url], { referrer: info.pageUrl, filename: videoName(tab.title), kind: 'hls' });
+  }
+  if (mediaKind(url) === 'hls') { // Safari's native HLS <video>: the playlist itself
+    return grab({ url, kind: 'hls', title: tab.title, referrer: info.pageUrl });
+  }
   if (!(await handoff([url], { referrer: info.pageUrl }))) giveBack(url);
 });
+
+// ---- Media found on each tab (M1) --------------------------------------------
+
+const media = new Map(); // tabId → Map(url → { url, kind }), from every frame of the tab
+
+function videoName(title) {
+  return `${(title || 'video').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 120)}.mp4`;
+}
+
+function setBadge(tabId) {
+  const count = media.get(tabId)?.size ?? 0;
+  api.action.setBadgeText({ tabId, text: count ? String(count) : '' }).catch(() => {});
+}
+
+api.tabs.onRemoved.addListener((tabId) => media.delete(tabId));
+api.tabs.onUpdated.addListener((tabId, change) => {
+  if (change.url) { media.delete(tabId); setBadge(tabId); } // navigated away
+});
+
+// Send a found video to Hoardly. Streams are named after the page, since their URL is just "index.m3u8".
+async function grab({ url, kind, title, referrer }) {
+  if (isYouTube(new URL(referrer).hostname)) return false;
+  const filename = kind === 'hls' ? videoName(title) : undefined;
+  const ok = await handoff([url], { referrer, filename, kind: kind === 'hls' ? 'hls' : undefined });
+  if (!ok && kind !== 'hls') giveBack(url);
+  return ok;
+}
 
 // ---- Messages from content scripts and the options page --------------------
 
@@ -141,6 +177,21 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return false;
     case 'take':
       handoff([message.url], { referrer: sender.url }).then((ok) => sendResponse({ ok }));
+      return true;
+    case 'media': {
+      const tabId = sender.tab?.id;
+      if (tabId === undefined) return false;
+      const found = media.get(tabId) ?? new Map();
+      for (const item of message.items) found.set(item.url, item);
+      media.set(tabId, found);
+      setBadge(tabId);
+      return false;
+    }
+    case 'tab-media': // popup
+      sendResponse([...(media.get(message.tabId)?.values() ?? [])]);
+      return false;
+    case 'grab': // overlay button or popup
+      grab({ ...message, referrer: message.referrer ?? sender.url }).then((ok) => sendResponse({ ok }));
       return true;
   }
 });

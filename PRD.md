@@ -250,7 +250,27 @@ Estimasi total: ~12–15 minggu untuk 1 developer.
 
 **Belum:** uji Firefox & Arc (tidak terpasang), Chrome manual (Load unpacked), B7 popup per-situs.
 
-## 15. Verifikasi (saat implementasi)
+## 15. Hasil M4 & M5 — Safari & Media Grabber (2026-09-28)
+**M4 (Safari)** sudah tercakup di M3: appex di dalam app, intercept klik, context menu — diuji manual.
+
+| Req | Hasil |
+|---|---|
+| M1 deteksi media: `PerformanceObserver` (request `.m3u8`/file media) + elemen `<video>/<audio>` | ✅ Helium otomatis, Safari manual |
+| M2 tombol "⬇ Download video" di atas video (shadow DOM) + popup daftar media + badge jumlah | ✅ |
+| M3 HLS: master → pilih kualitas (Picker di panel, default tertinggi) → segmen paralel → gabung; AES-128; fMP4 `EXT-X-MAP` + byte range; audio rendition terpisah | ✅ `scripts/e2e-hls.sh`: TS, AES-128, fMP4+audio → .mp4 30/30/18 dtk, frame ter-decode |
+| M4 output .mp4 tanpa re-encode, tanpa ffmpeg | ✅ `AVAssetReader` → `AVAssetWriter` passthrough |
+| M6 DRM ditolak (SAMPLE-AES, KEYFORMAT non-identity, video EME) | ✅ |
+| M7 YouTube: deteksi, overlay, dan grab mati total | ✅ |
+| Live stream | ⚠️ ditolak dengan pesan jelas (belum didukung) |
+
+**Temuan penting**
+- `AVMutableComposition.insertTimeRange` gagal (-12780) di macOS 27 bahkan untuk MP4 biasa, dan butuh timing presisi yang tak dimiliki fMP4 hasil gabungan. `AVAssetReader`/`AVAssetWriter` dengan input yang di-pump bersamaan (interleaved) bekerja untuk semua kasus — satu jalur export.
+- Safari memutar HLS native: `<video>.currentSrc` = URL `.m3u8` (bukan `blob:`), jadi jenis media ditentukan dari URL, bukan dari elemen.
+- Resume HLS per segmen (segmen selesai disimpan di `<id>.hoardly-hls/`).
+
+**Belum:** DASH (M5, P2), live stream, verifikasi export di macOS 14.
+
+## 16. Verifikasi (saat implementasi)
 - **Unit test** (`HoardlyTests`): pembagian segmen & dynamic split, parser HLS (master/media playlist, AES-128 key), resume state encode/decode.
 - **Server uji lokal** yang mendukung `Range` (mis. `caddy file-server` atau skrip kecil) + mode "tanpa Range" + mode "putus acak" → bandingkan SHA-256 hasil dengan sumber.
 - **Uji resume:** `kill -9` Hoardly di tengah download 5 GB, jalankan ulang, pastikan lanjut dan hash identik.

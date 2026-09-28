@@ -15,3 +15,17 @@ function wanted(rules, url, filename = '', size = -1) {
   const ext = fileExtension(filename) || fileExtension(new URL(url).pathname);
   return rules.extensions.includes(ext) || (rules.minSize > 0 && size >= rules.minSize);
 }
+
+const MEDIA_FILE = /\.(mp4|m4v|webm|mov|mkv|mp3|m4a|aac|ogg|oga|flac|wav)$/i;
+
+// 'hls' for playlists, 'file' for direct media files, null otherwise.
+function mediaKind(url) {
+  if (!/^https?:/i.test(url ?? '')) return null;
+  const path = new URL(url).pathname;
+  if (/\.m3u8$/i.test(path)) return 'hls';
+  return MEDIA_FILE.test(path) ? 'file' : null;
+}
+
+function isYouTube(hostname) {
+  return /(^|\.)(youtube\.com|youtu\.be|youtube-nocookie\.com)$/i.test(hostname);
+}

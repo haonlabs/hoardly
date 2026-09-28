@@ -9,7 +9,7 @@ final class DownloadManager {
     private(set) var speeds: [UUID: Int64] = [:] // bytes per second
     var totalSpeed: Int64 { speeds.values.reduce(0, +) }
 
-    @ObservationIgnored private var engines: [UUID: SegmentedDownload] = [:]
+    @ObservationIgnored private var engines: [UUID: any DownloadEngine] = [:]
     @ObservationIgnored private var samples: [UUID: (bytes: Int64, at: Date)] = [:]
     private let storeURL = URL.applicationSupportDirectory.appending(path: "Hoardly/downloads.json")
 
@@ -45,10 +45,17 @@ final class DownloadManager {
         schedule()
     }
 
-    func add(_ url: URL, headers: [String: String] = [:], fileName: String? = nil, directory: URL? = nil, start: Bool = true) {
-        let name = fileName ?? url.lastPathComponent
-        downloads.append(Download(url: url, headers: headers, directory: directory ?? Self.directory(for: name),
-                                  fileName: fileName, state: start ? .queued : .paused))
+    static func isStream(_ url: URL) -> Bool { url.pathExtension.lowercased() == "m3u8" }
+
+    func add(_ url: URL, headers: [String: String] = [:], fileName: String? = nil, directory: URL? = nil,
+             start: Bool = true, stream: Bool = false, variant: URL? = nil) {
+        let stream = stream || Self.isStream(url)
+        var name = fileName ?? url.lastPathComponent
+        if stream { name = (name as NSString).deletingPathExtension + ".mp4" } // playlists become one .mp4
+        var download = Download(url: url, headers: headers, directory: directory ?? Self.directory(for: name),
+                                fileName: stream ? name : fileName, state: start ? .queued : .paused)
+        if stream { download.stream = StreamProgress(variant: variant) }
+        downloads.append(download)
         save()
         schedule()
     }
@@ -99,9 +106,12 @@ final class DownloadManager {
         let limit = max(1, UserDefaults.standard.integer(forKey: "maxConcurrent"))
         let connections = max(1, UserDefaults.standard.integer(forKey: "connections"))
         for i in downloads.indices where downloads[i].state == .queued && engines.count < limit {
-            let engine = SegmentedDownload(downloads[i], connections: connections) { [weak self] update in
+            let report: @Sendable (Download) -> Void = { [weak self] update in
                 DispatchQueue.main.async { MainActor.assumeIsolated { self?.apply(update) } }
             }
+            let engine: any DownloadEngine = downloads[i].stream == nil
+                ? SegmentedDownload(downloads[i], connections: connections, onUpdate: report)
+                : HLSDownload(downloads[i], connections: connections, onUpdate: report)
             engines[downloads[i].id] = engine
             downloads[i].state = .running
             engine.start()

@@ -45,6 +45,7 @@ final class LocalBridge {
         let url: URL
         var headers: [String: String]
         var fileName: String?
+        var isStream = false
     }
 
     static let maxItems = 500
@@ -147,7 +148,8 @@ final class LocalBridge {
             guard let string = item["url"] as? String, let url = URL(string: string),
                   ["http", "https"].contains(url.scheme?.lowercased()), url.host() != nil else { return nil }
             let name = (item["filename"] as? String).flatMap { $0.isEmpty ? nil : SegmentedDownload.safeName($0) }
-            result.append(IncomingDownload(url: url, headers: shared.merging(headers(from: item)) { $1 }, fileName: name))
+            result.append(IncomingDownload(url: url, headers: shared.merging(headers(from: item)) { $1 }, fileName: name,
+                                           isStream: item["kind"] as? String == "hls"))
         }
         return result
     }

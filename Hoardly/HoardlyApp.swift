@@ -13,7 +13,7 @@ struct HoardlyApp: App {
             if UserDefaults.standard.bool(forKey: "confirmBrowserDownloads") {
                 NewDownloadPanel.show(items, manager: manager)
             } else {
-                for item in items { manager.add(item.url, headers: item.headers, fileName: item.fileName) }
+                for item in items { manager.add(item.url, headers: item.headers, fileName: item.fileName, stream: item.isStream) }
             }
         }
         bridge.start()
@@ -62,9 +62,7 @@ private struct MenuBarView: View {
             ForEach(active) { d in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(d.displayName).lineLimit(1).truncationMode(.middle)
-                    if let total = d.totalBytes, total > 0 {
-                        ProgressView(value: Double(d.received), total: Double(total))
-                    }
+                    if let fraction = d.fraction { ProgressView(value: fraction) }
                 }
             }
             Divider()

@@ -74,7 +74,7 @@ struct MainView: View {
                     .help(d.url.absoluteString)
             }
             .width(min: 180, ideal: 280)
-            TableColumn("Size") { d in Text(d.totalBytes.map(bytes) ?? "—").monospacedDigit() }
+            TableColumn("Size") { d in Text((d.totalBytes ?? (d.stream != nil ? d.received : nil)).map(bytes) ?? "—").monospacedDigit() }
                 .width(min: 60, ideal: 80)
             TableColumn("Progress") { d in progress(d) }
                 .width(min: 100, ideal: 150)
@@ -123,9 +123,8 @@ struct MainView: View {
     private func progress(_ d: Download) -> some View {
         switch d.state {
         case .running:
-            if let total = d.totalBytes, total > 0 {
-                ProgressView(value: Double(d.received), total: Double(total))
-                    .accessibilityValue("\(Int(100 * Double(d.received) / Double(total))) percent")
+            if let fraction = d.fraction {
+                ProgressView(value: fraction).accessibilityValue(percent(d))
             } else {
                 Text(bytes(d.received))
             }
@@ -137,13 +136,14 @@ struct MainView: View {
     }
 
     private func percent(_ d: Download) -> String {
-        guard let total = d.totalBytes, total > 0 else { return bytes(d.received) }
-        return (Double(d.received) / Double(total)).formatted(.percent.precision(.fractionLength(0)))
+        d.fraction?.formatted(.percent.precision(.fractionLength(0))) ?? bytes(d.received)
     }
 
     private func eta(_ d: Download) -> String {
-        guard d.state == .running, let total = d.totalBytes, let speed = manager.speeds[d.id], speed > 0 else { return "" }
-        let seconds = Double(total - d.received) / Double(speed)
+        guard d.state == .running, let fraction = d.fraction, fraction > 0, let speed = manager.speeds[d.id], speed > 0 else { return "" }
+        // Streams have no byte total; extrapolate from the share of segments done.
+        let remaining = d.totalBytes.map { Double($0 - d.received) } ?? Double(d.received) * (1 - fraction) / fraction
+        let seconds = remaining / Double(speed)
         return Duration.seconds(seconds).formatted(.units(allowed: [.hours, .minutes, .seconds], width: .narrow, maximumUnitCount: 2))
     }
 

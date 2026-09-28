@@ -32,10 +32,9 @@ enum DockProgress {
         let tile = NSApp.dockTile
         let running = downloads.filter { $0.state == .running }
         tile.badgeLabel = running.isEmpty ? nil : "\(running.count)"
-        let sized = running.compactMap { d in d.totalBytes.map { (received: d.received, total: $0) } }
-        let total = sized.reduce(0) { $0 + $1.total }
-        if total > 0 {
-            let view = NSHostingView(rootView: DockTileView(progress: Double(sized.reduce(0) { $0 + $1.received }) / Double(total)))
+        let fractions = running.compactMap(\.fraction)
+        if !fractions.isEmpty {
+            let view = NSHostingView(rootView: DockTileView(progress: fractions.reduce(0, +) / Double(fractions.count)))
             view.frame = NSRect(origin: .zero, size: tile.size)
             tile.contentView = view
         } else {

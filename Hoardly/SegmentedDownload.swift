@@ -4,7 +4,7 @@ import os
 
 /// Fetches one file over several HTTP range connections into `<id>.hoardly-part`, then moves it into place.
 /// All mutable state is confined to `queue`, which is also the URLSession delegate queue.
-nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, @unchecked Sendable {
+nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, DownloadEngine, @unchecked Sendable {
     static let minSplit: Int64 = 1 << 20
     static let maxRetries = 8
     private static let log = Logger(subsystem: "id.haonlabs.hoardly", category: "engine")
@@ -115,7 +115,7 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, @un
             let destination = Self.unusedURL(download.directory.appending(path: Self.safeName(download.displayName)))
             try FileManager.default.moveItem(at: download.partURL, to: destination)
             download.fileName = destination.lastPathComponent
-            markDownloaded(destination)
+            Self.markDownloaded(destination, from: download)
             download.state = .completed
         } catch {
             download.state = .failed(error.localizedDescription)
@@ -312,7 +312,7 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, @un
     }
 
     /// Quarantine so Gatekeeper still checks the file, plus "Where from" shown in Finder's Get Info.
-    private func markDownloaded(_ url: URL) {
+    static func markDownloaded(_ url: URL, from download: Download) {
         let referer = download.headers["Referer"].flatMap(URL.init(string:))
         var quarantine: [String: Any] = [
             kLSQuarantineAgentNameKey as String: "Hoardly",

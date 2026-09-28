@@ -47,6 +47,12 @@ const storeItems = () => (fs.existsSync(store) ? JSON.parse(fs.readFileSync(stor
 
 // --- setup ------------------------------------------------------------------
 for (const f of ['take.zip', 'alt.zip', 'fallback.zip', 'all1.iso', 'all2.dmg']) fs.writeFileSync(`${site}/${f}`, Buffer.alloc(3_000_000, f));
+fs.writeFileSync(`${site}/clip.mp4`, Buffer.alloc(200_000));
+fs.writeFileSync(`${site}/master.m3u8`, '#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1\nlow.m3u8\n');
+// A stand-in for hls.js: the <video> gets a blob:, the playlist only shows up as a network request.
+fs.writeFileSync(`${site}/show.html`, `<!doctype html><title>My Show: Episode 1</title><body style="margin:0">
+<video src="/clip.mp4" muted style="position:absolute;left:0;top:0;width:640px;height:360px;background:#000"></video>
+<script>fetch('/master.m3u8')</script>`);
 fs.writeFileSync(`${site}/page.html`, `<!doctype html><script>document.cookie = "session=abc123; path=/";</script>
 <a id="alt" href="/alt.zip" style="position:absolute;left:0;top:0;width:200px;height:100px;display:block">alt</a>
 <a href="/all1.iso" style="margin-top:120px;display:block">1</a><a href="/all2.dmg">2</a><a href="/readme.html">not a download</a>`);
@@ -104,6 +110,27 @@ try {
   })()`);
   check(JSON.parse(sent ?? '{}').links?.length === 3, `links collected: ${sent}`);
   check(await until(() => ['all1.iso', 'all2.dmg'].every((f) => storeItems().some((d) => d.url.endsWith(f) && 'completed' in d.state))), 'all links downloaded by Hoardly');
+
+  // M1/M2: the playlist a page loads shows up in the popup list, named after the page.
+  await go('http://127.0.0.1:8768/show.html');
+  const listed = await until(() => sw.eval(`(async () => {
+    const [tab] = await chrome.tabs.query({ url: 'http://127.0.0.1:8768/show.html' });
+    return JSON.stringify([...(media.get(tab.id)?.values() ?? [])]);
+  })()`).then((j) => (JSON.parse(j).some((m) => m.kind === 'hls') ? j : null)));
+  check(listed?.includes('master.m3u8') && listed.includes('clip.mp4'), `media found: ${listed}`);
+  // The overlay button over the <video>: hover, then click it (top-right corner of the video).
+  await page.call('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 300, y: 200 });
+  await sleep(300);
+  for (const type of ['mousePressed', 'mouseReleased']) {
+    await page.call('Input.dispatchMouseEvent', { type, x: 640 - 170 + 30, y: 25, button: 'left', clickCount: 1 });
+  }
+  check(await until(() => storeItems().some((d) => d.url.endsWith('/clip.mp4'))), 'overlay button sent clip.mp4 to Hoardly');
+  const streamGrab = await sw.eval(`grab({ url: 'http://127.0.0.1:8768/master.m3u8', kind: 'hls', title: 'My Show: Episode 1',
+    referrer: 'http://127.0.0.1:8768/show.html' })`);
+  const stream = await until(() => storeItems().find((d) => d.url.endsWith('/master.m3u8')));
+  check(streamGrab && stream?.stream && stream.fileName === 'My Show Episode 1.mp4', `stream handed over as HLS: ${stream?.fileName}`);
+  const onYouTube = await sw.eval(`grab({ url: 'http://127.0.0.1:8768/master.m3u8', kind: 'hls', title: 'x', referrer: 'https://www.youtube.com/watch?v=1' })`);
+  check(onYouTube === false, 'refused on YouTube');
 
   // B6: Hoardly not running → the browser downloads it after all.
   sh('pkill -x Hoardly || true');

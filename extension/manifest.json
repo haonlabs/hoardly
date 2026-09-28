@@ -1,14 +1,49 @@
 {
   "manifest_version": 3,
   "name": "Hoardly",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Send downloads to Hoardly, the download manager for macOS.",
-  "background": { "service_worker": "background.js", "scripts": ["rules.js", "background.js"] },
-  "permissions": ["contextMenus", "storage", "nativeMessaging", "downloads", "cookies"],
-  "host_permissions": ["<all_urls>"],
-  "content_scripts": [
-    { "matches": ["<all_urls>"], "js": ["rules.js", "content.js"], "run_at": "document_start", "all_frames": true }
+  "background": {
+    "service_worker": "background.js",
+    "scripts": [
+      "rules.js",
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "nativeMessaging",
+    "downloads",
+    "cookies"
   ],
-  "options_ui": { "page": "options.html" },
-  "browser_specific_settings": { "gecko": { "id": "hoardly@haonlabs.id", "strict_min_version": "121.0" } }
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "rules.js",
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "options_ui": {
+    "page": "options.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hoardly@haonlabs.id",
+      "strict_min_version": "121.0"
+    }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Hoardly"
+  }
 }

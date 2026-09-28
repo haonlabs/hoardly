@@ -31,7 +31,7 @@ Requires macOS 14 or later.
 | Browser | Get it |
 |---|---|
 | Safari | Included with the app: Safari → Settings → Extensions → Hoardly |
-| Chrome, Helium, Arc, Brave, Vivaldi, Opera | Chrome Web Store *(listing coming soon)* |
+| Chrome, Helium, Arc, Brave, Vivaldi, Opera | [Chrome Web Store](https://chromewebstore.google.com/detail/mbnhhkccmafijmndpleaalejoomejjem) *(in review — the link works once it's approved)* |
 | Microsoft Edge | Edge Add-ons *(coming soon)* |
 | Firefox | Firefox Add-ons *(coming soon)* |
 

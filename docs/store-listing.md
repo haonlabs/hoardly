@@ -1,5 +1,11 @@
 # Store listings
 
+| Store | Item | Status |
+|---|---|---|
+| Chrome Web Store | `mbnhhkccmafijmndpleaalejoomejjem` (publisher haonlabs, developedbyadifens@gmail.com) | Submitted 2026-09-28, in-depth review (broad host permissions), auto-publish on approval |
+| Edge Add-ons | — | not registered |
+| Firefox AMO | — | not registered |
+
 Same package for all three stores: `scripts/package-extension.sh` → `dist/hoardly-extension-<version>.zip` (built without `nativeMessaging`, which only the Safari build uses).
 Icons: `extension/icon-128.png` (Chrome, AMO), `design/icon-300.png` (Edge). Homepage: https://github.com/haonlabs/hoardly. Privacy policy: https://github.com/haonlabs/hoardly/blob/main/PRIVACY.md.
 

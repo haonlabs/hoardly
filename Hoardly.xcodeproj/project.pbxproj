@@ -46,6 +46,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A80000000000000000000002 /* Exceptions for "Hoardly" folder in "Hoardly" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A50000000000000000000001 /* Hoardly */;
+		};
 		A80000000000000000000001 /* Exceptions for "HoardlySafariExtension" folder in "HoardlySafariExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -58,6 +65,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A70000000000000000000001 /* Hoardly */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A80000000000000000000002 /* Exceptions for "Hoardly" folder in "Hoardly" target */,
+			);
 			path = Hoardly;
 			sourceTree = "<group>";
 		};
@@ -341,6 +351,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Hoardly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hoardly;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Haon Labs. MIT License.";
@@ -361,6 +372,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Hoardly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hoardly;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Haon Labs. MIT License.";

@@ -198,7 +198,25 @@ Estimasi total: ~12–15 minggu untuk 1 developer.
 
 **Sisa dari M0:** verifikasi remux AVFoundation di macOS 14 (VM); Firefox & Arc tidak terpasang, diuji di M3.
 
-## 12. Verifikasi (saat implementasi)
+## 12. Hasil M1 — Engine (2026-09-28)
+| Uji | Hasil |
+|---|---|
+| 5 GB, `kill -9` di 50%, relaunch | ✅ SHA-256 identik, quarantine + Where-From terpasang (`scripts/e2e-resume.sh 5120`) |
+| Koneksi diputus tiap 3–5 MB (`--drop`) | ✅ retry + dynamic split (hingga 25 segmen), hash identik |
+| Server tanpa `Range` (`--no-range`) | ✅ fallback 1 koneksi, restart dari 0 setelah kill, hash identik |
+| Server membatasi koneksi (`--max-conns 3`, 429 + `Retry-After`) | ✅ 1.9× lebih cepat dari curl |
+| speedtest.tele2.net (HTTP/1.1) | ✅ 1.4–6.8× lebih cepat dari curl (jaringan berisik) |
+| proof.ovh.net (HTTP/2, rate-limit request) | ⚠️ 0.76× curl: ledakan 8 request awal memicu 429; engine turun ke ≤4 stream dan berhenti memecah |
+
+**Temuan penting**
+- **HTTP/2 multiplexing:** satu `URLSession` menggabungkan semua range ke satu koneksi TCP → tidak ada percepatan. Solusi: satu session per segmen.
+- **HTTP/3:** setelah `alt-svc` ter-cache, CFNetwork pindah ke HTTP/3 yang hanya 0.2 MB/s di OVH (h2: 6 MB/s). Solusi: session `.ephemeral` (cache alt-svc tidak dipersist).
+- **Range terbuka** (`bytes=N-`) dipakai agar segmen yang belum tersentuh bisa dilebur ke stream yang berjalan saat server membatasi koneksi.
+- **ATS** dimatikan untuk app (`NSAllowsArbitraryLoads`) — download manager harus bisa unduh `http://`. Error permanen (ATS, TLS, URL salah) langsung gagal, tidak di-retry.
+
+**Tindak lanjut (M2+):** ramp-up koneksi bertahap untuk server ber-rate-limit (OVH); pilih folder/nama sebelum mulai (U3); hapus download dari daftar.
+
+## 13. Verifikasi (saat implementasi)
 - **Unit test** (`HoardlyTests`): pembagian segmen & dynamic split, parser HLS (master/media playlist, AES-128 key), resume state encode/decode.
 - **Server uji lokal** yang mendukung `Range` (mis. `caddy file-server` atau skrip kecil) + mode "tanpa Range" + mode "putus acak" → bandingkan SHA-256 hasil dengan sumber.
 - **Uji resume:** `kill -9` Hoardly di tengah download 5 GB, jalankan ulang, pastikan lanjut dan hash identik.

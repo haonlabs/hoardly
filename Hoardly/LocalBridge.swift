@@ -37,15 +37,9 @@ final class LocalBridge {
     static let port: NWEndpoint.Port = 47801 // ponytail: fixed port; add fallback ports if 47801 clashes in the wild
     static let allowedOrigins = ["chrome-extension://", "moz-extension://", "safari-web-extension://"]
 
-    struct Entry: Identifiable {
-        let id = UUID()
-        let date = Date()
-        let text: String
-    }
-
     let token: String
     private(set) var status = "Starting…"
-    private(set) var log: [Entry] = []
+    var onAdd: ((URL, [String: String]) -> Void)?
     private var listener: NWListener?
 
     init() {
@@ -130,14 +124,26 @@ final class LocalBridge {
                 return (400, ["error": "url must be http(s)"])
             }
             record("add via \(via): \(url.absoluteString)")
+            onAdd?(url, Self.headers(from: body))
             return (200, ["ok": true])
         default:
             return (404, ["error": "unknown path"])
         }
     }
 
+    /// Browser context the server may need (login cookies, hotlink checks). CR/LF dropped to block header injection.
+    static func headers(from body: [String: Any]) -> [String: String] {
+        let fields = ["referrer": "Referer", "userAgent": "User-Agent", "cookie": "Cookie"]
+        var headers: [String: String] = [:]
+        for (key, field) in fields {
+            if let value = body[key] as? String, !value.isEmpty, !value.contains(where: \.isNewline) {
+                headers[field] = value
+            }
+        }
+        return headers
+    }
+
     private func record(_ text: String) {
         Logger(subsystem: "id.haonlabs.hoardly", category: "bridge").notice("\(text, privacy: .public)")
-        log.append(Entry(text: text))
     }
 }

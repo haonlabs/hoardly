@@ -52,6 +52,7 @@ DMG=dist/Hoardly-$VERSION.dmg
 cp -R "$APP" build/dmg/
 ln -s /Applications build/dmg/Applications
 hdiutil create -volname "Hoardly $VERSION" -srcfolder build/dmg -format UDZO -ov "$DMG" -quiet
+rm -rf build/dmg "$ARCHIVE" # keeps stray Hoardly.app copies out of Spotlight/Launchpad
 
 if [ "$MODE" = full ]; then
   codesign --sign "Developer ID Application" --timestamp "$DMG"

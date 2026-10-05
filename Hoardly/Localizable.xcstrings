@@ -1,846 +1,856 @@
 {
-  "sourceLanguage": "en",
-  "version": "1.0",
-  "strings": {
-    "1. Add Hoardly to your browsers": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1. Tambahkan Hoardly ke browser Anda"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "…and any file over %lld MB" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "…dan file apa pun di atas %lld MB"
           }
         }
       }
     },
-    "2. Connect": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2. Hubungkan"
+    "…and any file: off" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "…dan file apa pun: nonaktif"
           }
         }
       }
     },
-    "3. Stay ready": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3. Selalu siap"
+    "1. Add Hoardly to your browsers" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. Tambahkan Hoardly ke browser Anda"
           }
         }
       }
     },
-    "Address": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alamat"
+    "2. Connect" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Hubungkan"
           }
         }
       }
     },
-    "All": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semua"
+    "3. Stay ready" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Selalu siap"
           }
         }
       }
     },
-    "Archives": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arsip"
+    "Address" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alamat"
           }
         }
       }
     },
-    "Ask before starting downloads sent from the browser": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tanya dulu sebelum memulai unduhan dari browser"
+    "All" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semua"
           }
         }
       }
     },
-    "Bridge failed: %@": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Koneksi browser gagal: %@"
+    "Archives" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arsip"
           }
         }
       }
     },
-    "Browser downloads": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan browser"
+    "Ask before starting downloads sent from the browser" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanya dulu sebelum memulai unduhan dari browser"
           }
         }
       }
     },
-    "Browsers": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Browser"
+    "Bridge failed: %@" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koneksi browser gagal: %@"
           }
         }
       }
     },
-    "Browsers can only hand downloads to Hoardly while it's running; otherwise they download as usual.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Browser hanya bisa menyerahkan unduhan ke Hoardly saat Hoardly berjalan; jika tidak, browser mengunduh seperti biasa."
+    "Browser downloads" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan browser"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Batal"
+    "Browsers" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browser"
           }
         }
       }
     },
-    "Categories": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kategori"
+    "Browsers can only hand downloads to Hoardly while it's running; otherwise they download as usual." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browser hanya bisa menyerahkan unduhan ke Hoardly saat Hoardly berjalan; jika tidak, browser mengunduh seperti biasa."
           }
         }
       }
     },
-    "Check for Updates…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Periksa Pembaruan…"
+    "Cancel" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batal"
           }
         }
       }
     },
-    "Choose…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pilih…"
+    "Categories" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategori"
           }
         }
       }
     },
-    "Completed": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selesai"
+    "Check for Updates…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periksa Pembaruan…"
           }
         }
       }
     },
-    "Connect": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hubungkan"
+    "Choose…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih…"
           }
         }
       }
     },
-    "Connect %@ to Hoardly?": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hubungkan %@ ke Hoardly?"
+    "Completed" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
           }
         }
       }
     },
-    "Connections per download: %lld": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Koneksi per unduhan: %lld"
+    "Connect" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubungkan"
           }
         }
       }
     },
-    "Copy": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salin"
+    "Connect %@ to Hoardly?" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubungkan %@ ke Hoardly?"
           }
         }
       }
     },
-    "Copy Address": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salin Alamat"
+    "Connections per download: %lld" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koneksi per unduhan: %lld"
           }
         }
       }
     },
-    "Documents": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dokumen"
+    "Copy" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salin"
           }
         }
       }
     },
-    "Done": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selesai"
+    "Copy Address" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salin Alamat"
           }
         }
       }
     },
-    "Don’t Allow": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jangan Izinkan"
+    "Documents" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumen"
           }
         }
       }
     },
-    "Download Later": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduh Nanti"
+    "Don’t Allow" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jangan Izinkan"
           }
         }
       }
     },
-    "Download addresses, one per line": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alamat unduhan, satu per baris"
+    "Done" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
           }
         }
       }
     },
-    "Download complete": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan selesai"
+    "Download addresses, one per line" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alamat unduhan, satu per baris"
           }
         }
       }
     },
-    "Download failed": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan gagal"
+    "Download complete" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan selesai"
           }
         }
       }
     },
-    "Download folder": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Folder unduhan"
+    "Download failed" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan gagal"
           }
         }
       }
     },
-    "Downloading": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mengunduh"
+    "Download folder" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder unduhan"
           }
         }
       }
     },
-    "Failed": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gagal"
+    "Download Later" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduh Nanti"
           }
         }
       }
     },
-    "Faster, resumable downloads from every browser.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan lebih cepat dan bisa dilanjutkan, dari browser apa pun."
+    "Downloading" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mengunduh"
           }
         }
       }
     },
-    "File name": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nama file"
+    "Failed" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gagal"
           }
         }
       }
     },
-    "Files": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "File"
+    "Faster, resumable downloads from every browser." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan lebih cepat dan bisa dilanjutkan, dari browser apa pun."
           }
         }
       }
     },
-    "General": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Umum"
+    "File name" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nama file"
           }
         }
       }
     },
-    "Get Extension": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pasang Ekstensi"
+    "Files" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File"
           }
         }
       }
     },
-    "Hold ⌥ Option while clicking a link to let the browser download it instead.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tahan ⌥ Option saat mengeklik tautan agar browser yang mengunduhnya."
+    "General" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umum"
           }
         }
       }
     },
-    "Listening on 127.0.0.1:%lld": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Siap di 127.0.0.1:%lld"
+    "Get Extension" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasang Ekstensi"
           }
         }
       }
     },
-    "Move Files to Trash": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pindahkan File ke Tong Sampah"
+    "Hoardly" : {
+      "comment" : "The name of the app's main window.",
+      "isCommentAutoGenerated" : true
+    },
+    "Hold ⌥ Option while clicking a link to let the browser download it instead." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahan ⌥ Option saat mengeklik tautan agar browser yang mengunduhnya."
           }
         }
       }
     },
-    "Music": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Musik"
+    "Listening on 127.0.0.1:%lld" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siap di 127.0.0.1:%lld"
           }
         }
       }
     },
-    "Name": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nama"
+    "Move Files to Trash" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindahkan File ke Tong Sampah"
           }
         }
       }
     },
-    "New Download": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan Baru"
+    "Music" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musik"
           }
         }
       }
     },
-    "New Download…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan Baru…"
+    "Name" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nama"
           }
         }
       }
     },
-    "No active downloads": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tidak ada unduhan aktif"
+    "New Download" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan Baru"
           }
         }
       }
     },
-    "Open Hoardly": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buka Hoardly"
+    "New Download…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan Baru…"
           }
         }
       }
     },
-    "Open Hoardly at login": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buka Hoardly saat login"
+    "No active downloads" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada unduhan aktif"
           }
         }
       }
     },
-    "Other": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lainnya"
+    "Open Hoardly" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka Hoardly"
           }
         }
       }
     },
-    "Pairing token": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Token pemasangan"
+    "Open Hoardly at login" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka Hoardly saat login"
           }
         }
       }
     },
-    "Paste the token into the Hoardly extension's settings in Safari, Chrome, Helium or Firefox.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tempel token ke pengaturan ekstensi Hoardly di Safari, Chrome, Helium, atau Firefox."
+    "Other" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lainnya"
           }
         }
       }
     },
-    "Pause": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jeda"
+    "Pairing token" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token pemasangan"
           }
         }
       }
     },
-    "Paused · %@": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dijeda · %@"
+    "Paste the token into the Hoardly extension's settings in Safari, Chrome, Helium or Firefox." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempel token ke pengaturan ekstensi Hoardly di Safari, Chrome, Helium, atau Firefox."
           }
         }
       }
     },
-    "Programs": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Program"
+    "Pause" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeda"
           }
         }
       }
     },
-    "Progress": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progres"
+    "Paused · %@" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dijeda · %@"
           }
         }
       }
     },
-    "Quality": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kualitas"
+    "Programs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Program"
           }
         }
       }
     },
-    "Queued": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antre"
+    "Progress" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progres"
           }
         }
       }
     },
-    "Queued & Paused": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antre & Dijeda"
+    "Quality" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kualitas"
           }
         }
       }
     },
-    "Quit": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keluar"
+    "Queued" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antre"
           }
         }
       }
     },
-    "Remove": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hapus"
+    "Queued & Paused" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antre & Dijeda"
           }
         }
       }
     },
-    "Remove %lld download(s)?": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hapus %lld unduhan?"
+    "Quit" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keluar"
           }
         }
       }
     },
-    "Remove from List": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hapus dari Daftar"
+    "Remove" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus"
           }
         }
       }
     },
-    "Remove…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hapus…"
+    "Remove %lld download(s)?" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus %lld unduhan?"
           }
         }
       }
     },
-    "Resume": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lanjutkan"
+    "Remove from List" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus dari Daftar"
           }
         }
       }
     },
-    "Save to": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Simpan ke"
+    "Remove…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus…"
           }
         }
       }
     },
-    "Set Up Browsers…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atur Browser…"
+    "Resume" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lanjutkan"
           }
         }
       }
     },
-    "Show in Finder": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tampilkan di Finder"
+    "Save to" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simpan ke"
           }
         }
       }
     },
-    "Simultaneous downloads: %lld": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unduhan bersamaan: %lld"
+    "Set Up Browsers…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atur Browser…"
           }
         }
       }
     },
-    "Size": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ukuran"
+    "Show in Finder" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan di Finder"
           }
         }
       }
     },
-    "Sort into category folders (Video, Music, Archives…)": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kelompokkan ke folder kategori (Video, Music, Archives…)"
+    "Simultaneous downloads: %lld" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unduhan bersamaan: %lld"
           }
         }
       }
     },
-    "Speed": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kecepatan"
+    "Size" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukuran"
           }
         }
       }
     },
-    "Start Download": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mulai Unduh"
+    "Sort into category folders (Video, Music, Archives…)" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kelompokkan ke folder kategori (Video, Music, Archives…)"
           }
         }
       }
     },
-    "Starting…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Memulai…"
+    "Speed" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kecepatan"
           }
         }
       }
     },
-    "Status": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+    "Start Download" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mulai Unduh"
           }
         }
       }
     },
-    "Take over files of type": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ambil alih file berjenis"
+    "Starting…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memulai…"
           }
         }
       }
     },
-    "The Hoardly extension in %@ will send downloads here. Only allow this if you just installed or reset the extension.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ekstensi Hoardly di %@ akan mengirim unduhan ke sini. Izinkan hanya jika Anda baru saja memasang atau mengatur ulang ekstensinya."
+    "Status" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         }
       }
     },
-    "The first time a browser's extension reaches Hoardly, a dialog asks you to connect it. Click Connect.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saat ekstensi di sebuah browser pertama kali menghubungi Hoardly, muncul dialog untuk menghubungkannya. Klik Hubungkan."
+    "Take over files of type" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambil alih file berjenis"
           }
         }
       }
     },
-    "Time Left": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sisa Waktu"
+    "The first time a browser's extension reaches Hoardly, a dialog asks you to connect it. Click Connect." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saat ekstensi di sebuah browser pertama kali menghubungi Hoardly, muncul dialog untuk menghubungkannya. Klik Hubungkan."
           }
         }
       }
     },
-    "Turn On in Safari…": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktifkan di Safari…"
+    "The Hoardly extension in %@ will send downloads here. Only allow this if you just installed or reset the extension." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekstensi Hoardly di %@ akan mengirim unduhan ke sini. Izinkan hanya jika Anda baru saja memasang atau mengatur ulang ekstensinya."
           }
         }
       }
     },
-    "Turned on": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktif"
+    "Time Left" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sisa Waktu"
           }
         }
       }
     },
-    "Unfinished downloads lose their partial data.": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Data unduhan yang belum selesai akan hilang."
+    "Turn On in Safari…" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktifkan di Safari…"
           }
         }
       }
     },
-    "Video": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Video"
+    "Turned on" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktif"
           }
         }
       }
     },
-    "Welcome to Hoardly": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selamat datang di Hoardly"
+    "Unfinished downloads lose their partial data." : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data unduhan yang belum selesai akan hilang."
           }
         }
       }
     },
-    "your browser": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "browser Anda"
+    "Video" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video"
           }
         }
       }
     },
-    "…and any file over %lld MB": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "…dan file apa pun di atas %lld MB"
+    "Welcome to Hoardly" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selamat datang di Hoardly"
           }
         }
       }
     },
-    "…and any file: off": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "…dan file apa pun: nonaktif"
+    "your browser" : {
+      "localizations" : {
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "browser Anda"
           }
         }
       }
     }
-  }
+  },
+  "version" : "1.1"
 }

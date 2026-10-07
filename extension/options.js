@@ -4,6 +4,11 @@ const result = document.getElementById('result');
 
 api.storage.local.get('token').then(({ token }) => { input.value = token ?? ''; });
 
+const enabled = document.getElementById('enabled');
+api.storage.local.get('enabled').then((s) => { enabled.checked = s.enabled !== false; });
+api.storage.onChanged.addListener((changes) => { if (changes.enabled) enabled.checked = changes.enabled.newValue !== false; });
+enabled.addEventListener('change', () => api.storage.local.set({ enabled: enabled.checked }));
+
 function show(r) {
   result.textContent = r?.authorized ? `✅ Connected to Hoardly (via ${r.via})`
     : r?.status ? '❌ Not connected — the request was declined or the token is wrong'

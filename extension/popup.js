@@ -17,7 +17,22 @@ function showStatus(r) {
 }
 api.runtime.sendMessage({ type: 'ping' }).then(showStatus);
 
+const toggle = document.getElementById('enabled');
+const hint = document.getElementById('hint');
+function showEnabled(on) {
+  toggle.checked = on;
+  hint.textContent = on ? 'Take over downloads in this browser' : 'Off — the browser handles downloads itself';
+}
+toggle.addEventListener('change', () => {
+  showEnabled(toggle.checked);
+  api.storage.local.set({ enabled: toggle.checked });
+  if (!toggle.checked) { list.replaceChildren(); showEmpty('Hoardly is turned off.'); }
+});
+
 (async () => {
+  const { enabled } = await api.storage.local.get('enabled');
+  showEnabled(enabled !== false);
+  if (enabled === false) return showEmpty('Hoardly is turned off.');
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
   if (!tab?.url || isYouTube(new URL(tab.url).hostname)) {
     return showEmpty('Video downloads are turned off on YouTube.');

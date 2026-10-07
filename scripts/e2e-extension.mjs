@@ -46,7 +46,7 @@ const targets = async () => (await fetch(`http://127.0.0.1:${CDP}/json`)).json()
 const storeItems = () => (fs.existsSync(store) ? JSON.parse(fs.readFileSync(store, 'utf8')) : []);
 
 // --- setup ------------------------------------------------------------------
-for (const f of ['take.zip', 'alt.zip', 'fallback.zip', 'all1.iso', 'all2.dmg']) fs.writeFileSync(`${site}/${f}`, Buffer.alloc(3_000_000, f));
+for (const f of ['take.zip', 'alt.zip', 'fallback.zip', 'off.zip', 'all1.iso', 'all2.dmg']) fs.writeFileSync(`${site}/${f}`, Buffer.alloc(3_000_000, f));
 fs.writeFileSync(`${site}/clip.mp4`, Buffer.alloc(200_000));
 fs.writeFileSync(`${site}/master.m3u8`, '#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1\nlow.m3u8\n');
 // A stand-in for hls.js: the <video> gets a blob:, the playlist only shows up as a network request.
@@ -138,6 +138,15 @@ try {
   check(streamGrab && stream?.stream && stream.fileName === 'My Show Episode 1.mp4', `stream handed over as HLS: ${stream?.fileName}`);
   const onYouTube = await sw.eval(`grab({ url: 'http://127.0.0.1:8768/master.m3u8', kind: 'hls', title: 'x', referrer: 'https://www.youtube.com/watch?v=1' })`);
   check(onYouTube === false, 'refused on YouTube');
+
+  // B7: take-over switched off for this site → the browser keeps the download.
+  await sw.eval(`chrome.storage.local.set({ disabledHosts: ['127.0.0.1'] })`);
+  await sleep(300);
+  await go('http://127.0.0.1:8768/off.zip');
+  check(await until(() => fs.existsSync(`${browserDownloads}/off.zip`)), 'site off: browser kept off.zip');
+  check(!storeItems().some((d) => d.url.endsWith('/off.zip')), 'site off: Hoardly left off.zip alone');
+  await sw.eval(`chrome.storage.local.set({ disabledHosts: [] })`);
+  await sleep(300);
 
   // B6: Hoardly not running → the browser downloads it after all.
   sh('pkill -x Hoardly || true');

@@ -33,10 +33,16 @@ async function sendAny(path, body) {
 
 let rules = DEFAULT_RULES;
 let enabled = true; // the user's on/off switch (popup); off = Hoardly leaves the browser alone
-const loaded = api.storage.local.get(['rules', 'enabled']).then((stored) => {
+let disabledHosts = []; // sites where take-over is off (B7), set from the popup
+const loaded = api.storage.local.get(['rules', 'enabled', 'disabledHosts']).then((stored) => {
   if (stored.rules) rules = stored.rules;
   enabled = stored.enabled !== false;
+  disabledHosts = stored.disabledHosts ?? [];
 });
+
+function siteOff(url) {
+  try { return disabledHosts.includes(new URL(url).hostname); } catch { return false; }
+}
 
 async function ping() {
   try {
@@ -112,6 +118,7 @@ async function takeOver(item) {
   const url = item.finalUrl || item.url;
   if (allowed.has(url) || allowed.has(item.url) || item.byExtensionId === api.runtime.id) return;
   const name = (item.filename || '').split(/[\\/]/).pop();
+  if (siteOff(item.referrer) || siteOff(url)) return;
   if (!wanted(rules, url, name, item.totalBytes ?? item.fileSize ?? -1)) return;
   await api.downloads.cancel(item.id).catch(() => {});
   api.downloads.erase({ id: item.id }).catch(() => {});
@@ -142,7 +149,9 @@ function syncContextMenus() {
 loaded.then(syncContextMenus);
 
 api.storage.onChanged.addListener((changes, area) => {
-  if (area !== 'local' || !changes.enabled) return;
+  if (area !== 'local') return;
+  if (changes.disabledHosts) disabledHosts = changes.disabledHosts.newValue ?? [];
+  if (!changes.enabled) return;
   enabled = changes.enabled.newValue !== false;
   syncContextMenus();
   if (!enabled) { // forget what tabs found and clear the badges
@@ -209,7 +218,7 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       pair().then(sendResponse);
       return true;
     case 'config': // Safari has no downloads API, so its content script intercepts link clicks instead
-      loaded.then(() => sendResponse({ rules, enabled, interceptClicks: !api.downloads }));
+      loaded.then(() => sendResponse({ rules, enabled, disabledHosts, interceptClicks: !api.downloads }));
       return true;
     case 'allow':
       allowOnce(message.url);

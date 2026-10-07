@@ -29,11 +29,25 @@ toggle.addEventListener('change', () => {
   if (!toggle.checked) { list.replaceChildren(); showEmpty('Hoardly is turned off.'); }
 });
 
+async function setupSiteSwitch(host) {
+  const { disabledHosts = [] } = await api.storage.local.get('disabledHosts');
+  const box = document.getElementById('siteOn');
+  box.checked = !disabledHosts.includes(host);
+  document.getElementById('siteName').textContent = `Take over downloads on ${host}`;
+  document.getElementById('site').hidden = false;
+  box.addEventListener('change', async () => {
+    const { disabledHosts = [] } = await api.storage.local.get('disabledHosts'); // re-read: another popup may have changed it
+    const others = disabledHosts.filter((h) => h !== host);
+    await api.storage.local.set({ disabledHosts: box.checked ? others : [...others, host] });
+  });
+}
+
 (async () => {
   const { enabled } = await api.storage.local.get('enabled');
   showEnabled(enabled !== false);
   if (enabled === false) return showEmpty('Hoardly is turned off.');
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
+  if (/^https?:/i.test(tab?.url ?? '')) setupSiteSwitch(new URL(tab.url).hostname);
   if (!tab?.url || isYouTube(new URL(tab.url).hostname)) {
     return showEmpty('Video downloads are turned off on YouTube.');
   }

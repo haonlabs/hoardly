@@ -1,9 +1,11 @@
 const api = globalThis.browser ?? globalThis.chrome;
-let config; // { rules, interceptClicks } from the background script
+let config; // { rules, disabledHosts, interceptClicks } from the background script
 let enabled = true; // the on/off switch in the popup; off = leave every page untouched
 api.runtime.sendMessage({ type: 'config' }).then((c) => { config = c; enabled = c?.enabled !== false; }, () => {});
 api.storage.onChanged.addListener((changes, area) => {
-  if (area === 'local' && changes.enabled) enabled = changes.enabled.newValue !== false;
+  if (area !== 'local') return;
+  if (changes.enabled) enabled = changes.enabled.newValue !== false;
+  if (config && changes.disabledHosts) config.disabledHosts = changes.disabledHosts.newValue ?? []; // per-site switch (B7)
 });
 
 // ⌥-click: the browser keeps this download. mousedown, so the background knows before the download starts.
@@ -16,6 +18,7 @@ document.addEventListener('mousedown', (event) => {
 document.addEventListener('click', (event) => {
   const link = event.target.closest?.('a[href]');
   if (!link || !enabled || event.button !== 0 || event.altKey || !config?.interceptClicks) return;
+  if (config.disabledHosts?.includes(location.hostname)) return;
   if (!wanted(config.rules, link.href)) return;
   event.preventDefault();
   event.stopImmediatePropagation();

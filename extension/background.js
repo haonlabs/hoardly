@@ -32,7 +32,11 @@ async function sendAny(path, body) {
 // ---- Rules -----------------------------------------------------------------
 
 let rules = DEFAULT_RULES;
-const loaded = api.storage.local.get('rules').then((stored) => { if (stored.rules) rules = stored.rules; });
+let enabled = true; // the user's on/off switch (popup); off = Hoardly leaves the browser alone
+const loaded = api.storage.local.get(['rules', 'enabled']).then((stored) => {
+  if (stored.rules) rules = stored.rules;
+  enabled = stored.enabled !== false;
+});
 
 async function ping() {
   try {
@@ -104,6 +108,7 @@ function giveBack(url) {
 
 async function takeOver(item) {
   await loaded;
+  if (!enabled) return;
   const url = item.finalUrl || item.url;
   if (allowed.has(url) || allowed.has(item.url) || item.byExtensionId === api.runtime.id) return;
   const name = (item.filename || '').split(/[\\/]/).pop();
@@ -125,13 +130,30 @@ if (api.downloads?.onDeterminingFilename) {
 
 // ---- Context menu ----------------------------------------------------------
 
-// Register on every background start: Safari doesn't reliably fire onInstalled on enable/update.
-api.contextMenus.removeAll(() => {
-  api.contextMenus.create({ id: 'hoardly-download', title: 'Download with Hoardly', contexts: ['link', 'image', 'video', 'audio'] });
-  api.contextMenus.create({ id: 'hoardly-all', title: 'Download All Links with Hoardly', contexts: ['page'] });
+// Registered on every background start (Safari doesn't reliably fire onInstalled on enable/update)
+// and whenever the on/off switch changes. Switched off, the menu items disappear.
+function syncContextMenus() {
+  api.contextMenus.removeAll(() => {
+    if (!enabled) return;
+    api.contextMenus.create({ id: 'hoardly-download', title: 'Download with Hoardly', contexts: ['link', 'image', 'video', 'audio'] });
+    api.contextMenus.create({ id: 'hoardly-all', title: 'Download All Links with Hoardly', contexts: ['page'] });
+  });
+}
+loaded.then(syncContextMenus);
+
+api.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'local' || !changes.enabled) return;
+  enabled = changes.enabled.newValue !== false;
+  syncContextMenus();
+  if (!enabled) { // forget what tabs found and clear the badges
+    const tabIds = [...media.keys()];
+    media.clear();
+    tabIds.forEach(setBadge);
+  }
 });
 
 api.contextMenus.onClicked.addListener(async (info, tab) => {
+  if (!enabled) return;
   if (info.menuItemId === 'hoardly-all') {
     const links = await api.tabs.sendMessage(tab.id, { type: 'links' }).catch(() => []);
     if (links?.length) handoff(links, { referrer: info.pageUrl });
@@ -187,17 +209,18 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       pair().then(sendResponse);
       return true;
     case 'config': // Safari has no downloads API, so its content script intercepts link clicks instead
-      loaded.then(() => sendResponse({ rules, interceptClicks: !api.downloads }));
+      loaded.then(() => sendResponse({ rules, enabled, interceptClicks: !api.downloads }));
       return true;
     case 'allow':
       allowOnce(message.url);
       return false;
     case 'take':
+      if (!enabled) { sendResponse({ ok: false }); return false; }
       handoff([message.url], { referrer: sender.url }).then((ok) => sendResponse({ ok }));
       return true;
     case 'media': {
       const tabId = sender.tab?.id;
-      if (tabId === undefined) return false;
+      if (tabId === undefined || !enabled) return false;
       const found = media.get(tabId) ?? new Map();
       for (const item of message.items) found.set(item.url, item);
       media.set(tabId, found);
@@ -208,6 +231,7 @@ api.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse([...(media.get(message.tabId)?.values() ?? [])]);
       return false;
     case 'grab': // overlay button or popup
+      if (!enabled) { sendResponse({ ok: false }); return false; }
       grab({ ...message, referrer: message.referrer ?? sender.url }).then((ok) => sendResponse({ ok }));
       return true;
   }

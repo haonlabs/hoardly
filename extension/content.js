@@ -1,6 +1,10 @@
 const api = globalThis.browser ?? globalThis.chrome;
 let config; // { rules, interceptClicks } from the background script
-api.runtime.sendMessage({ type: 'config' }).then((c) => { config = c; }, () => {});
+let enabled = true; // the on/off switch in the popup; off = leave every page untouched
+api.runtime.sendMessage({ type: 'config' }).then((c) => { config = c; enabled = c?.enabled !== false; }, () => {});
+api.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.enabled) enabled = changes.enabled.newValue !== false;
+});
 
 // ⌥-click: the browser keeps this download. mousedown, so the background knows before the download starts.
 document.addEventListener('mousedown', (event) => {
@@ -11,7 +15,7 @@ document.addEventListener('mousedown', (event) => {
 // Safari only (no downloads API): take matching link clicks before the browser does.
 document.addEventListener('click', (event) => {
   const link = event.target.closest?.('a[href]');
-  if (!link || event.button !== 0 || event.altKey || !config?.interceptClicks) return;
+  if (!link || !enabled || event.button !== 0 || event.altKey || !config?.interceptClicks) return;
   if (!wanted(config.rules, link.href)) return;
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -21,7 +25,7 @@ document.addEventListener('click', (event) => {
 
 // "Download All Links": matching links on this page, deduplicated.
 api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message?.type !== 'links') return;
+  if (message?.type !== 'links' || !enabled) return;
   const rules = config?.rules ?? DEFAULT_RULES;
   sendResponse([...new Set([...document.links].map((a) => a.href))].filter((url) => wanted(rules, url)));
 });
@@ -36,7 +40,7 @@ function watchMedia() {
 
   function consider(url) {
     const kind = mediaKind(url);
-    if (!kind || found.has(url)) return;
+    if (!enabled || !kind || found.has(url)) return;
     found.set(url, { url, kind });
     clearTimeout(reportTimer);
     reportTimer = setTimeout(() => api.runtime.sendMessage({ type: 'media', items: [...found.values()] }).catch(() => {}), 300);
@@ -53,7 +57,7 @@ function watchMedia() {
   // "Download video" button over whichever video is under the pointer.
   let host, button, target, hideTimer;
   addEventListener('mousemove', (event) => {
-    const video = document.elementsFromPoint(event.clientX, event.clientY).find((el) => el.tagName === 'VIDEO');
+    const video = enabled && document.elementsFromPoint(event.clientX, event.clientY).find((el) => el.tagName === 'VIDEO');
     if (video && video.getBoundingClientRect().width > 200) show(video);
     else if (target && !host?.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 800); }
   }, { passive: true });

@@ -14,8 +14,14 @@
   button { font: inherit; padding: 3px 10px; border-radius: 6px; border: 1px solid #8886; background: transparent; cursor: pointer; }
   button:hover { background: #0a84ff; color: #fff; border-color: #0a84ff; }
   p { margin: 12px; opacity: .75; }
+  label.switch { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #8884; cursor: pointer; }
+  label.switch small { display: block; opacity: .6; }
 </style>
 <header><strong>Hoardly</strong><span id="status">Checking…</span></header>
+<label class="switch">
+  <span>Enabled<small id="hint">Take over downloads in this browser</small></span>
+  <input type="checkbox" id="enabled" checked>
+</label>
 <ul id="list"></ul>
 <p id="empty" hidden></p>
 <script src="rules.js"></script>

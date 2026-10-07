@@ -82,7 +82,7 @@ Prioritas: **P0** = wajib MVP, **P1** = MVP jika waktu cukup, **P2** = pasca-MVP
 | B4 | Auto-intercept download berdasarkan aturan: ekstensi file (zip, dmg, mp4, iso, pkg, …) dan ukuran minimum; tahan **⌥ Option** saat klik untuk melewati Hoardly | P0 |
 | B5 | Context menu "Download with Hoardly" untuk link, gambar, video; "Download semua link" di halaman | P0 |
 | B6 | Bila Hoardly tidak berjalan: ekstensi membuka `hoardly://` untuk meluncurkan app; bila gagal, biarkan browser yang mengunduh (tidak boleh ada download hilang) | P0 |
-| B7 | Popup ekstensi: status koneksi ke app, toggle intercept on/off per situs | P1 |
+| B7 | Popup ekstensi: status koneksi ke app, toggle intercept on/off per situs ✅ | P1 |
 
 **Mekanisme intercept per browser**
 - **Chromium/Firefox:** `downloads.onCreated` → batalkan & hapus dari daftar browser → kirim URL + cookies + referer + UA + nama file ke app.

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Hoardly",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Send downloads to Hoardly, the download manager for macOS.",
   "icons": {
     "16": "icon-16.png",

@@ -22,6 +22,7 @@ Hoardly makes downloads faster and unbreakable on your Mac. This extension conne
 • Resumable: pause, lose Wi-Fi or restart your Mac — downloads pick up where they stopped.
 • Automatic: files you download (archives, installers, videos, music…) go to Hoardly, with your sign-in cookies so protected downloads work. Hold ⌥ Option while clicking to keep one in the browser.
 • Right-click any link → "Download with Hoardly", or "Download All Links with Hoardly" for a whole page.
+• Your choice: turn Hoardly off from the extension's toolbar popup whenever you want the browser to handle downloads itself, and back on when you need it.
 • Video grabber: save videos and HLS streams from web pages as MP4. Protected (DRM) videos are not supported, and it is turned off on YouTube.
 
 Requires the Hoardly app for macOS 14 or later. Everything stays on your Mac: no accounts, no analytics.
@@ -38,7 +39,7 @@ Hand browser downloads and page videos to the Hoardly download manager app runni
 | `downloads` | Notice downloads the browser starts so matching ones can be handed to Hoardly, and give them back to the browser if Hoardly isn't running. |
 | `cookies` | Pass the site's cookies for that single download to Hoardly so downloads that require signing in keep working. |
 | `contextMenus` | "Download with Hoardly" and "Download All Links with Hoardly" menu items. |
-| `storage` | Remember the pairing token and download rules. |
+| `storage` | Remember the pairing token, download rules and the on/off switch. |
 | Host permission `<all_urls>` | Read cookies for the download's site, collect links for "Download All Links", and find videos on the page for the video grabber. Downloads can come from any site. |
 
 Remote code: none. Data use: none collected; see privacy policy.

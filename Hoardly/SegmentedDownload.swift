@@ -7,6 +7,9 @@ import os
 nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, DownloadEngine, @unchecked Sendable {
     static let minSplit: Int64 = 1 << 20
     static let maxRetries = 8
+    // MediaFire leaves connections open but stops sending for minutes, and CFNetwork's request timeout
+    // never fires. A fresh connection gets full speed again, so we cut any task quiet for this long.
+    static let stallTimeout: TimeInterval = 15
     private static let log = Logger(subsystem: "id.haonlabs.hoardly", category: "engine")
 
     private let queue = DispatchQueue(label: "id.haonlabs.hoardly.download")
@@ -27,6 +30,8 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
     private var tasks: [ObjectIdentifier: Int] = [:] // task → segment index
     private var retrying: Set<Int> = []
     private var throttled: Set<ObjectIdentifier> = []
+    private var lastActivity: [ObjectIdentifier: Date] = [:]
+    private var stalled: Set<ObjectIdentifier> = []
     private var failures: [Int: Int] = [:]
     private var retryAfter: [Int: TimeInterval] = [:]
 
@@ -81,6 +86,12 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
     /// Persist point: bytes are on disk before the snapshot claiming them leaves this object.
     private func flush() {
         guard active else { return }
+        let now = Date()
+        for (id, last) in lastActivity where now.timeIntervalSince(last) > Self.stallTimeout {
+            lastActivity[id] = nil
+            stalled.insert(id)
+            sessions[id]?.invalidateAndCancel()
+        }
         try? file?.synchronize()
         onUpdate(download)
     }
@@ -92,6 +103,8 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
         timer?.cancel()
         timer = nil
         tasks.removeAll()
+        lastActivity.removeAll()
+        stalled.removeAll()
         retrying.removeAll()
         try? file?.synchronize()
         try? file?.close()
@@ -172,6 +185,7 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
         let task = session.dataTask(with: request)
         tasks[ObjectIdentifier(task)] = index
         sessions[ObjectIdentifier(task)] = session
+        lastActivity[ObjectIdentifier(task)] = Date()
         task.resume()
     }
 
@@ -257,11 +271,14 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
         }
         download.segments[index].received += Int64(chunk.count)
         failures[index] = 0
+        lastActivity[ObjectIdentifier(dataTask)] = Date()
         if download.segments[index].remaining <= 0 { dataTask.cancel() } // reached a split point
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         sessions.removeValue(forKey: ObjectIdentifier(task))?.finishTasksAndInvalidate()
+        lastActivity[ObjectIdentifier(task)] = nil
+        let wasStalled = stalled.remove(ObjectIdentifier(task)) != nil
         guard active, let index = tasks.removeValue(forKey: ObjectIdentifier(task)) else { return }
         if download.segments[index].end == .max, error == nil { // unknown size: end of stream is end of file
             download.segments[index].end = download.segments[index].position
@@ -272,6 +289,8 @@ nonisolated final class SegmentedDownload: NSObject, URLSessionDataDelegate, Dow
         if download.segments[index].remaining > 0 {
             if wasThrottled, !tasks.isEmpty {
                 // Other connections still run; the segment just waits for a free slot.
+            } else if wasStalled {
+                // Not a failure: fill() below reconnects right away.
             } else if Self.isTransient(error) {
                 retry(index, error)
             } else {
